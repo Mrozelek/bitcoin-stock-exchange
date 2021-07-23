@@ -31,6 +31,8 @@ const updateFunds = async ({ userId, wallet, currencyName, amount }) => {
 
 const walletService = {
   async getFunds({ userId, currencyName }) {
+    await validateIfUserExists(userId);
+
     const userFunds = (await getUserById(userId)).funds;
     return currencyName ? userFunds[currencyName] ?? 0 : userFunds;
   },

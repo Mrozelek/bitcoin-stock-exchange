@@ -17,9 +17,9 @@ export const exchangeCrypto = async ({ userId, wallet, currencyToBuy, currencyTo
   await wallet.subtractFunds({ userId, currencyName: currencyToPay, amount: amountToPay });
 };
 
-export default (wallet = walletService) => ({
+export default ((wallet = walletService) => ({
   async buyCrypto({ userId, currencyName, amount, price }) {
-    exchangeCrypto({
+    await exchangeCrypto({
       userId,
       wallet,
       currencyToBuy: currencyName,
@@ -30,7 +30,7 @@ export default (wallet = walletService) => ({
   },
 
   async sellCrypto({ userId, currencyName, amount, price }) {
-    exchangeCrypto({
+    await exchangeCrypto({
       userId,
       wallet,
       currencyName,
@@ -40,4 +40,4 @@ export default (wallet = walletService) => ({
       amountToPay: amount
     });
   }
-});
+}))();

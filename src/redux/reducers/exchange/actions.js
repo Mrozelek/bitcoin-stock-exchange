@@ -26,6 +26,6 @@ export const makeExchange = (transactionInfo) => async (dispatch) => {
     }
     dispatch(makeExchangeSuccess(transactionInfo));
   } catch (error) {
-    dispatch(makeExchangeFail(transactionInfo, error));
+    dispatch(makeExchangeFail(transactionInfo, error.message));
   }
 };
