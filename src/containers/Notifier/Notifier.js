@@ -1,73 +1,87 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 import { useStore } from 'react-redux';
+import Button from '@material-ui/core/Button';
 
-let exchangeErrorCurrent;
+let currentStateExchangeError;
+let previousStateExchangeError;
 const selectExchangeError = (storeState) => storeState.exchange;
 const predExchangeError = (currentState) => currentState.isError;
-const messageExchangeError = (currentState) => currentState.error;
-const handleExchangeErrorMessage = (storeState) => {
-  const previousState = exchangeErrorCurrent;
-  exchangeErrorCurrent = selectExchangeError(storeState);
+const getMessageExchangeError = (currentState) => currentState.error;
 
-  if (previousState !== exchangeErrorCurrent && predExchangeError(exchangeErrorCurrent)) {
-    return [true, messageExchangeError(exchangeErrorCurrent)];
-  }
-  return [false];
-};
-
-let exchangeSuccessCurrent;
+let currentStateExchangeSuccess;
+let previousStateExchangeSuccess;
 const selectExchangeSuccess = (storeState) => storeState.exchange;
 const predExchangeSuccess = (currentState) => !currentState.isLoading && !currentState.isError;
-const messageExchangeSuccess = () => 'Exchange successful';
-const handleExchangeSuccessMessage = (storeState) => {
-  const previousState = exchangeSuccessCurrent;
-  exchangeSuccessCurrent = selectExchangeSuccess(storeState);
+const getMessageExchangeSuccess = () => 'Exchange successful';
 
-  if (previousState !== exchangeSuccessCurrent && predExchangeSuccess(exchangeSuccessCurrent)) {
-    return [true, messageExchangeSuccess(exchangeSuccessCurrent)];
-  }
-  return [false];
-};
-
-let stockFetchErrorCurrent;
+let currentStateStockFetchError;
+let previousStateStockFetchError;
 const selectStockFetchError = (storeState) => storeState.stock;
 const predStockFetchError = (currentState) => currentState.isError;
-const messageStockFetchError = (currentState) => currentState.error;
-const handleStockFetchErrorMessage = (storeState) => {
-  const previousState = stockFetchErrorCurrent;
-  stockFetchErrorCurrent = selectStockFetchError(storeState);
-
-  if (previousState !== stockFetchErrorCurrent && predStockFetchError(stockFetchErrorCurrent)) {
-    return [true, messageStockFetchError(stockFetchErrorCurrent)];
-  }
-  return [false];
-};
+const getMessageStockFetchError = (currentState) => currentState.error;
 
 const Notifier = () => {
   const store = useStore();
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
-  const notifierHandlers = [
-    handleExchangeErrorMessage,
-    handleExchangeSuccessMessage,
-    handleStockFetchErrorMessage
+  const showNotification = ({ message, options }) => {
+    enqueueSnackbar(message, options);
+  };
+
+  const closeAction = (key) => (
+    <Button style={{ color: 'white' }} onClick={() => { closeSnackbar(key); }}>
+      Dismiss
+    </Button>
+  );
+
+  const notifiers = [
+    {
+      currentState: currentStateExchangeError,
+      previousState: previousStateExchangeError,
+      select: selectExchangeError,
+      pred: predExchangeError,
+      getMessage: getMessageExchangeError,
+      options: { variant: 'error' }
+    },
+    {
+      currentState: currentStateExchangeSuccess,
+      previousState: previousStateExchangeSuccess,
+      select: selectExchangeSuccess,
+      pred: predExchangeSuccess,
+      getMessage: getMessageExchangeSuccess,
+      options: { variant: 'success' }
+    },
+    {
+      currentState: currentStateStockFetchError,
+      previousState: previousStateStockFetchError,
+      select: selectStockFetchError,
+      pred: predStockFetchError,
+      getMessage: getMessageStockFetchError,
+      options: {
+        variant: 'error',
+        preventDuplicate: true,
+        persist: true,
+        action: closeAction
+      }
+    }
   ];
 
-  const handleNotifier = () => {
-    const state = store.getState();
+  const handleNotifications = () => {
+    const storeState = store.getState();
 
-    notifierHandlers.forEach((handler) => {
-      const [shouldEnqueueSnackbar, message] = handler(state);
+    notifiers.forEach((notifier) => {
+      notifier.previousState = notifier.currentState;
+      notifier.currentState = notifier.select(storeState);
 
-      if (shouldEnqueueSnackbar) {
-        enqueueSnackbar(message);
+      if (notifier.previousState !== notifier.currentState && notifier.pred(notifier.currentState)) {
+        showNotification({ message: notifier.getMessage(notifier.currentState), options: notifier.options });
       }
     });
   };
 
   useEffect(() => {
-    const unsubscribe = store.subscribe(handleNotifier);
+    const unsubscribe = store.subscribe(handleNotifications);
     return () => {
       unsubscribe();
     };
