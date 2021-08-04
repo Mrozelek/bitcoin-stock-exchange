@@ -44,6 +44,6 @@ export const getTickers = () => async (dispatch) => {
     const data = await fetchStockData();
     dispatch(getStockSuccess(data));
   } catch (error) {
-    dispatch(getStockFail(error));
+    dispatch(getStockFail(error.message));
   }
 };
