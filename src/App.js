@@ -4,6 +4,7 @@ import { USERS_PROFILES } from './utils/constants';
 import SiteHeading from './containers/SiteHeading';
 import MarketPage from './containers/MarketPage';
 import { wrapper } from './App.module.scss';
+import Notifier from './containers/Notifier';
 
 const App = () => {
   database.setItem(USERS_PROFILES, [{
@@ -15,6 +16,7 @@ const App = () => {
   }]);
   return (
     <div className={wrapper}>
+      <Notifier />
       <SiteHeading />
       <MarketPage />
     </div>
