@@ -68,7 +68,7 @@ describe('Async action creator', () => {
   });
 
   it('creates STOCK_GET_FAILURE when fetching stock data failed', async () => {
-    axios.get.mockImplementationOnce(() => Promise.reject('Failed to fetch data'));
+    axios.get.mockImplementationOnce(() => Promise.reject({ message: 'Failed to fetch data' }));
 
     await store.dispatch(actions.getTickers());
     expect(store.getActions()).toEqual(expectedFailureActions);
