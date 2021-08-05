@@ -28,6 +28,7 @@ const predStockFetchSuccess = (currentState) => !currentState.isLoading && !curr
 
 const NO_CONNECTION_SNACKBAR_KEY = 'noConnection';
 const HIDE_SNACKBAR = 'hideSnackbar';
+const SHOW_SNACKBAR = 'showSnackbar';
 
 const Notifier = () => {
   const store = useStore();
@@ -54,7 +55,8 @@ const Notifier = () => {
       select: selectExchangeError,
       pred: predExchangeError,
       getMessage: getMessageExchangeError,
-      options: { variant: 'error' }
+      options: { variant: 'error' },
+      action: SHOW_SNACKBAR
     },
     {
       currentState: currentStateExchangeSuccess,
@@ -62,7 +64,8 @@ const Notifier = () => {
       select: selectExchangeSuccess,
       pred: predExchangeSuccess,
       getMessage: getMessageExchangeSuccess,
-      options: { variant: 'success' }
+      options: { variant: 'success' },
+      action: SHOW_SNACKBAR
     },
     {
       currentState: currentStateStockFetchError,
@@ -76,7 +79,8 @@ const Notifier = () => {
         persist: true,
         action: closeAction,
         key: NO_CONNECTION_SNACKBAR_KEY
-      }
+      },
+      action: SHOW_SNACKBAR
     },
     {
       currentState: currentStateStockFetchSuccess,
@@ -97,10 +101,15 @@ const Notifier = () => {
       notifier.currentState = select(storeState);
 
       if (notifier.previousState !== notifier.currentState && pred(notifier.currentState)) {
-        if (action === HIDE_SNACKBAR) {
-          hideNotification(key);
-        } else {
-          showNotification({ message: getMessage(notifier.currentState), options });
+        switch (action) {
+          case SHOW_SNACKBAR:
+            showNotification({ message: getMessage(notifier.currentState), options });
+            break;
+          case HIDE_SNACKBAR:
+            hideNotification(key);
+            break;
+          default:
+            break;
         }
       }
     });
