@@ -21,12 +21,24 @@ const selectStockFetchError = (storeState) => storeState.stock;
 const predStockFetchError = (currentState) => currentState.isError;
 const getMessageStockFetchError = (currentState) => currentState.error;
 
+let currentStateStockFetchSuccess;
+let previousStateStockFetchSuccess;
+const selectStockFetchSuccess = (storeState) => storeState.stock;
+const predStockFetchSuccess = (currentState) => !currentState.isLoading && !currentState.isError;
+
+const NO_CONNECTION_SNACKBAR_KEY = 'noConnection';
+const HIDE_SNACKBAR = 'hideSnackbar';
+
 const Notifier = () => {
   const store = useStore();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const showNotification = ({ message, options }) => {
     enqueueSnackbar(message, options);
+  };
+
+  const hideNotification = (key) => {
+    closeSnackbar(key);
   };
 
   const closeAction = (key) => (
@@ -62,8 +74,17 @@ const Notifier = () => {
         variant: 'error',
         preventDuplicate: true,
         persist: true,
-        action: closeAction
+        action: closeAction,
+        key: NO_CONNECTION_SNACKBAR_KEY
       }
+    },
+    {
+      currentState: currentStateStockFetchSuccess,
+      previousState: previousStateStockFetchSuccess,
+      select: selectStockFetchSuccess,
+      pred: predStockFetchSuccess,
+      key: NO_CONNECTION_SNACKBAR_KEY,
+      action: HIDE_SNACKBAR
     }
   ];
 
@@ -71,11 +92,16 @@ const Notifier = () => {
     const storeState = store.getState();
 
     notifiers.forEach((notifier) => {
+      const { select, pred, getMessage, options, key, action } = notifier;
       notifier.previousState = notifier.currentState;
-      notifier.currentState = notifier.select(storeState);
+      notifier.currentState = select(storeState);
 
-      if (notifier.previousState !== notifier.currentState && notifier.pred(notifier.currentState)) {
-        showNotification({ message: notifier.getMessage(notifier.currentState), options: notifier.options });
+      if (notifier.previousState !== notifier.currentState && pred(notifier.currentState)) {
+        if (action === HIDE_SNACKBAR) {
+          hideNotification(key);
+        } else {
+          showNotification({ message: getMessage(notifier.currentState), options });
+        }
       }
     });
   };
