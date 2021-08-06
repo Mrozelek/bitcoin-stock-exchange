@@ -1,1 +1,6 @@
-export const NOT_ENOUGH_FUNDS = 'User do not have enough funds';
+export class NotEnoughFundsError extends Error {
+  constructor() {
+    super('User do not have enough funds');
+    this.name = this.constructor.name;
+  }
+}

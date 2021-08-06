@@ -2,7 +2,7 @@ import databaseService from './databaseService';
 import walletService from './walletService';
 import { validateIfUserHasSufficientFunds, exchangeCrypto } from './transactionService';
 import { USERS_PROFILES, BASE_CURRENCY } from '../utils/constants';
-import { NOT_ENOUGH_FUNDS } from '../utils/errors';
+import { NotEnoughFundsError } from '../utils/errors';
 
 const userProfile = {
   userId: 1,
@@ -39,7 +39,7 @@ describe('validateIfUserHasSufficientFunds function', () => {
       wallet: walletService,
       currencyName: 'ETH',
       amountToPay: 10
-    })).rejects.toThrow(new Error(NOT_ENOUGH_FUNDS));
+    })).rejects.toThrow(new NotEnoughFundsError());
   });
 });
 
@@ -69,6 +69,6 @@ describe('exchangeCrypto function', () => {
       currencyToPay: BASE_CURRENCY,
       amountToBuy: 5,
       amountToPay: 15
-    })).rejects.toThrow(new Error(NOT_ENOUGH_FUNDS));
+    })).rejects.toThrow(new NotEnoughFundsError());
   });
 });

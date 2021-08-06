@@ -1,12 +1,12 @@
 import walletService from './walletService';
 import { BASE_CURRENCY } from '../utils/constants';
-import { NOT_ENOUGH_FUNDS } from '../utils/errors';
+import { NotEnoughFundsError } from '../utils/errors';
 
 export const validateIfUserHasSufficientFunds = async ({ userId, wallet, currencyName, amountToPay }) => {
   const availableFunds = await wallet.getFunds({ userId, currencyName });
 
   if (availableFunds < amountToPay) {
-    throw new Error(NOT_ENOUGH_FUNDS);
+    throw new NotEnoughFundsError();
   }
 };
 
