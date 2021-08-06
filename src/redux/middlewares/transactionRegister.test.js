@@ -4,7 +4,7 @@ import { TRANSACTIONS_HISTORY_KEY } from '../../utils/constants';
 
 const transactionInfo = { userId: 1, currencyName: 'ETH', amount: 5, price: 1 };
 
-describe('registerExchangeQuery function', () => {
+describe('registerTransaction function', () => {
   beforeEach(async () => {
     await database.setItem(TRANSACTIONS_HISTORY_KEY, []);
   });
@@ -22,7 +22,7 @@ describe('registerExchangeQuery function', () => {
     expect(testObject).toStrictEqual({ transactionInfo, time: expect.any(String), error: error.message });
   });
 
-  it('should not delete a history of the other transations', async () => {
+  it('should not delete a history of the other transactions', async () => {
     await registerTransaction(transactionInfo);
     await registerTransaction(transactionInfo);
     expect(await database.getItem(TRANSACTIONS_HISTORY_KEY)).toHaveLength(2);
