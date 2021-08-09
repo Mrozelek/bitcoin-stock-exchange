@@ -1,5 +1,7 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import { render, screen, fireEvent, act } from '@testing-library/react';
+import configureStore from '../../redux/configureStore';
 import { StockBuilder } from '../../utils/stockBuilder';
 import Transaction, { errorMessages } from './Transaction';
 
@@ -69,7 +71,8 @@ describe('Transaction', () => {
 
   beforeEach(async () => {
     await act(async () => {
-      render(<Transaction stockExchangeData={stockExchangeData} />);
+      const store = configureStore();
+      render(<Provider store={store}><Transaction stockExchangeData={stockExchangeData} /></Provider>);
     });
   });
 

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useForm, Controller } from 'react-hook-form';
 import * as Component from '@material-ui/core';
@@ -6,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import styles from './transaction.module.scss';
 import Text from '../../components/Text';
+import { makeExchange } from '../../redux/reducers/exchange/actions';
 
 const defaultValues = {
   isBuying: true,
@@ -46,11 +48,15 @@ const Transaction = ({ stockExchangeData }) => {
     defaultValues,
     resolver: yupResolver(schema)
   });
+
   const [isBuying, currencyName, amount] = [watch('isBuying'), watch('currencyName'), watch('amount')];
+  const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    // eslint-disable-next-line no-console
-    console.log(data);
+    const { amount, currencyName, isBuying, price } = data;
+
+    // TODO: this is temporary ID and should be replaced by real user ID
+    dispatch(makeExchange({ userId: 1, amount, currencyName, isBuying, price }));
   };
 
   useEffect(() => {

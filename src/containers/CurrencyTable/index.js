@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CurrencyTable from './CurrencyTable';
-import Text from '../Text';
+import Text from '../../components/Text';
 
 const useStyles = makeStyles(() => ({
   center: {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Transaction from '../Transaction';
-import Table from '../../components/CurrencyTable';
+import Table from '../CurrencyTable';
 import { wrapper, table, transaction } from './marketPage.module.scss';
 import { getTickers } from '../../redux/reducers/stock/actions';
 

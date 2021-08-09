@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Transaction and wallet services [@nilphym](https://github.com/nilphym).
+- Localforage library [@nilphym](https://github.com/nilphym).
+- Luxon library [@nilphym](https://github.com/nilphym).
+- File with error messages [@nilphym](https://github.com/nilphym).
+- Exchange reducer [@nilphym](https://github.com/nilphym).
+- Custom middlewares folder with transactionRegister middleware [@nilphym](https://github.com/nilphym).
+- Cache busting for stock data fetching [@nilphym](https://github.com/nilphym).
+
+### Changed
+
+- Moved constants to separate file [@nilphym](https://github.com/nilphym).
+- Moved colors to utils directory [@nilphym](https://github.com/nilphym).
+- Moved CurrencyTable to containers directory [@nilphym](https://github.com/nilphym).
+- Stock builder uses cryptocurrency name as uuid [@nilphym](https://github.com/nilphym).
+
 ## [1.1.0] - 2021-07-10
 
 ### Added

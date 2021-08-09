@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { BASE_CURRENCY } from '../../../utils/constants';
 
 export const STOCK_GET_INIT = 'stock/get/init';
 export const STOCK_GET_SUCCESS = 'stock/get/success';
@@ -28,11 +29,11 @@ const AVAILABLE_STOCKS = [
   'litecoin',
   'stellar'
 ];
-const BASE_STOCK = 'usd';
 const BASE_URL = 'https://api.coingecko.com/api/v3/coins/markets';
 
 const fetchStockData = async () => {
-  const url = `${BASE_URL}?vs_currency=${BASE_STOCK}&ids=${AVAILABLE_STOCKS.join(',')}`;
+  const cacheBuster = Math.round(new Date().getTime() / 1000);
+  const url = `${BASE_URL}?vs_currency=${BASE_CURRENCY}&ids=${AVAILABLE_STOCKS.join(',')}&cb=${cacheBuster}`;
   const { data } = await axios.get(url);
   return data;
 };
