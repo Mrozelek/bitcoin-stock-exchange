@@ -1,7 +1,7 @@
 import databaseService from './databaseService';
 import walletService from './walletService';
 import { validateIfUserHasSufficientFunds, exchangeCrypto } from './transactionService';
-import { USERS_PROFILES, BASE_CURRENCY } from '../utils/constants';
+import { USERS_PROFILES_KEY, BASE_CURRENCY } from '../utils/constants';
 import { NotEnoughFundsError } from '../utils/errors';
 
 const userProfile = {
@@ -14,7 +14,7 @@ const userProfile = {
 
 describe('validateIfUserHasSufficientFunds function', () => {
   beforeAll(async () => {
-    await databaseService.setItem(USERS_PROFILES, [userProfile]);
+    await databaseService.setItem(USERS_PROFILES_KEY, [userProfile]);
   });
 
   it('should not throw error when user have enough funds to buy crypto', async () => {
@@ -45,7 +45,7 @@ describe('validateIfUserHasSufficientFunds function', () => {
 
 describe('exchangeCrypto function', () => {
   beforeEach(async () => {
-    await databaseService.setItem(USERS_PROFILES, [userProfile]);
+    await databaseService.setItem(USERS_PROFILES_KEY, [userProfile]);
   });
 
   it('should correctly exchange currency', async () => {
@@ -58,7 +58,7 @@ describe('exchangeCrypto function', () => {
       amountToPay: 10
     });
 
-    expect((await databaseService.getItem(USERS_PROFILES))[0].funds).toStrictEqual({ ETH: 10, [BASE_CURRENCY]: 0 });
+    expect((await databaseService.getItem(USERS_PROFILES_KEY))[0].funds).toStrictEqual({ ETH: 10, [BASE_CURRENCY]: 0 });
   });
 
   it('should throw error if user do not have enough funds', async () => {

@@ -1,12 +1,17 @@
 import { DateTime } from 'luxon';
-import databaseService from '../../services/databaseService';
-import { TRANSACTIONS_HISTORY_KEY } from '../../utils/constants';
+import { getUserById, setUser } from '../../services/databaseService';
+
+const appendTransactionToProfile = (profile, transaction) => {
+  profile.transactions = [...profile.transactions, transaction];
+};
 
 const registerTransaction = async (transactionInfo, error) => {
-  const transactionsHistory = await databaseService.getItem(TRANSACTIONS_HISTORY_KEY) ?? [];
-  const newTransactionQuery = { time: DateTime.now().toISO(), transactionInfo, error: error?.message ?? error };
-  const newTransactionsHistory = [newTransactionQuery, ...transactionsHistory];
-  await databaseService.setItem(TRANSACTIONS_HISTORY_KEY, newTransactionsHistory);
+  const newTransactionRecord = { time: DateTime.now().toISO(), transactionInfo, error: error?.message ?? error };
+
+  const profile = await getUserById(transactionInfo.userId);
+  appendTransactionToProfile(profile, newTransactionRecord);
+
+  await setUser(profile);
 };
 
 export default registerTransaction;

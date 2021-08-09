@@ -1,6 +1,6 @@
 import databaseService from './databaseService';
-import walletService, { getUserById } from './walletService';
-import { USERS_PROFILES } from '../utils/constants';
+import walletService from './walletService';
+import { USERS_PROFILES_KEY } from '../utils/constants';
 
 const userProfile = {
   userId: 1,
@@ -10,24 +10,13 @@ const userProfile = {
   }
 };
 
-describe('getUserById function', () => {
-  it('should get user sucessfully', async () => {
-    await databaseService.setItem(USERS_PROFILES, [userProfile]);
-    expect(await getUserById(1)).toStrictEqual(userProfile);
-  });
-
-  it('should return undefined if there is no such user', async () => {
-    expect(await getUserById(-1)).toBe(undefined);
-  });
-});
-
 describe('getFunds function', () => {
   beforeAll(async () => {
     userProfile.funds = {
       USD: 50,
       ETH: 100
     };
-    await databaseService.setItem(USERS_PROFILES, [userProfile]);
+    await databaseService.setItem(USERS_PROFILES_KEY, [userProfile]);
   });
 
   it('should return amount of currency correctly', async () => {
@@ -49,12 +38,12 @@ describe('addFunds function', () => {
       USD: 50,
       ETH: 100
     };
-    await databaseService.setItem(USERS_PROFILES, [userProfile]);
+    await databaseService.setItem(USERS_PROFILES_KEY, [userProfile]);
   });
 
   it('should add currency successfully', async () => {
     await walletService.addFunds({ userId: 1, currencyName: 'ETH', amount: 20 });
-    expect((await databaseService.getItem(USERS_PROFILES))[0].funds).toStrictEqual({ USD: 50, ETH: 120 });
+    expect((await databaseService.getItem(USERS_PROFILES_KEY))[0].funds).toStrictEqual({ USD: 50, ETH: 120 });
   });
 });
 
@@ -64,11 +53,11 @@ describe('subtractFunds function', () => {
       USD: 50,
       ETH: 100
     };
-    await databaseService.setItem(USERS_PROFILES, [userProfile]);
+    await databaseService.setItem(USERS_PROFILES_KEY, [userProfile]);
   });
 
   it('should subtract currency successfully', async () => {
     await walletService.subtractFunds({ userId: 1, currencyName: 'USD', amount: 20 });
-    expect((await databaseService.getItem(USERS_PROFILES))[0].funds).toStrictEqual({ USD: 30, ETH: 100 });
+    expect((await databaseService.getItem(USERS_PROFILES_KEY))[0].funds).toStrictEqual({ USD: 30, ETH: 100 });
   });
 });
