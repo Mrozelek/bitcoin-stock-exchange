@@ -1,7 +1,10 @@
-/* eslint-disable prefer-promise-reject-errors */
+import React from 'react';
 import axios from 'axios';
 import configureMockStore from 'redux-mock-store';
+import { render } from '@testing-library/react';
 import thunk from 'redux-thunk';
+import { SnackbarProvider } from 'notistack';
+import { SnackbarUtilsConfigurator } from '../../../utils/SnackbarUtils';
 import * as actions from './actions';
 import reducer, { initialState } from './reducer';
 
@@ -57,6 +60,7 @@ describe('Async action creator', () => {
   let store;
 
   beforeEach(() => {
+    render(<SnackbarProvider><SnackbarUtilsConfigurator /></SnackbarProvider>);
     store = mockStore({});
   });
 
@@ -68,7 +72,7 @@ describe('Async action creator', () => {
   });
 
   it('creates STOCK_GET_FAILURE when fetching stock data failed', async () => {
-    axios.get.mockImplementationOnce(() => Promise.reject({ message: 'Failed to fetch data' }));
+    axios.get.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch data')));
 
     await store.dispatch(actions.getTickers());
     expect(store.getActions()).toEqual(expectedFailureActions);

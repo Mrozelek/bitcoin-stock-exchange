@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { SnackbarProvider } from 'notistack';
 import configureStore, { history } from './redux/configureStore';
 import { MAX_NOTIFICATIONS } from './utils/constants';
+import { SnackbarUtilsConfigurator } from './utils/SnackbarUtils';
 import App from './App';
 import './index.scss';
 
@@ -15,6 +16,7 @@ ReactDOM.render(
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <SnackbarProvider maxSnack={MAX_NOTIFICATIONS}>
+          <SnackbarUtilsConfigurator />
           <App />
         </SnackbarProvider>
       </ConnectedRouter>
