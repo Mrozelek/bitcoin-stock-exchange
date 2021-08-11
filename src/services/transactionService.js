@@ -40,4 +40,4 @@ export default (wallet = walletService) => ({
       amountToPay: amount
     });
   }
-})();
+});
