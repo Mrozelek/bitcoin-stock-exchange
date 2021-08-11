@@ -1,8 +1,8 @@
-import database from '../utils/database';
+import databaseService from './databaseService';
 import walletService from './walletService';
 import { validateIfUserHasSufficientFunds, exchangeCrypto } from './transactionService';
-import { USERS_PROFILES, BASE_CURRENCY } from '../utils/constants';
-import { NOT_ENOUGH_FUNDS } from '../utils/errors';
+import { USERS_PROFILES_KEY, BASE_CURRENCY } from '../utils/constants';
+import { NotEnoughFundsError } from '../utils/errors';
 
 const userProfile = {
   userId: 1,
@@ -14,7 +14,7 @@ const userProfile = {
 
 describe('validateIfUserHasSufficientFunds function', () => {
   beforeAll(async () => {
-    await database.setItem(USERS_PROFILES, [userProfile]);
+    await databaseService.setItem(USERS_PROFILES_KEY, [userProfile]);
   });
 
   it('should not throw error when user have enough funds to buy crypto', async () => {
@@ -39,13 +39,13 @@ describe('validateIfUserHasSufficientFunds function', () => {
       wallet: walletService,
       currencyName: 'ETH',
       amountToPay: 10
-    })).rejects.toThrow(new Error(NOT_ENOUGH_FUNDS));
+    })).rejects.toThrow(new NotEnoughFundsError());
   });
 });
 
 describe('exchangeCrypto function', () => {
   beforeEach(async () => {
-    await database.setItem(USERS_PROFILES, [userProfile]);
+    await databaseService.setItem(USERS_PROFILES_KEY, [userProfile]);
   });
 
   it('should correctly exchange currency', async () => {
@@ -58,7 +58,7 @@ describe('exchangeCrypto function', () => {
       amountToPay: 10
     });
 
-    expect((await database.getItem(USERS_PROFILES))[0].funds).toStrictEqual({ ETH: 10, [BASE_CURRENCY]: 0 });
+    expect((await databaseService.getItem(USERS_PROFILES_KEY))[0].funds).toStrictEqual({ ETH: 10, [BASE_CURRENCY]: 0 });
   });
 
   it('should throw error if user do not have enough funds', async () => {
@@ -69,6 +69,6 @@ describe('exchangeCrypto function', () => {
       currencyToPay: BASE_CURRENCY,
       amountToBuy: 5,
       amountToPay: 15
-    })).rejects.toThrow(new Error(NOT_ENOUGH_FUNDS));
+    })).rejects.toThrow(new NotEnoughFundsError());
   });
 });

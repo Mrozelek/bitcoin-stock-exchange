@@ -2,8 +2,15 @@ import registerTransaction from './middlewares/transactionRegister';
 import { EXCHANGE_MAKE_SUCCESS, EXCHANGE_MAKE_FAILURE } from './reducers/exchange/actions';
 
 const exchangeMiddleware = () => (next) => (action) => {
-  if (action.type === EXCHANGE_MAKE_SUCCESS || action.type === EXCHANGE_MAKE_FAILURE) {
-    registerTransaction(action.payload.transactionInfo);
+  switch (action.type) {
+    case EXCHANGE_MAKE_SUCCESS:
+      registerTransaction(action.payload.transactionInfo);
+      break;
+    case EXCHANGE_MAKE_FAILURE:
+      registerTransaction(action.payload.transactionInfo, action.payload.error);
+      break;
+    default:
+      break;
   }
 
   next(action);
