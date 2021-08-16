@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Notification API with notistack [@nilphym](https://github.com/nilphym).
 - Notifications that inform user about various events [@nilphym](https://github.com/nilphym).
 - Github deploy script [@nilphym](https://github.com/nilphym).
+- Github deploy action [@nilphym](https://github.com/nilphym).
 
 ### Changed
 
