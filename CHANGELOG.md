@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exchange reducer [@nilphym](https://github.com/nilphym).
 - Custom middlewares folder with transactionRegister middleware [@nilphym](https://github.com/nilphym).
 - Cache busting for stock data fetching [@nilphym](https://github.com/nilphym).
+- Notification API with notistack [@nilphym](https://github.com/nilphym).
+- Notifications that inform user about various events [@nilphym](https://github.com/nilphym).
 
 ### Changed
 
@@ -23,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved colors to utils directory [@nilphym](https://github.com/nilphym).
 - Moved CurrencyTable to containers directory [@nilphym](https://github.com/nilphym).
 - Stock builder uses cryptocurrency name as uuid [@nilphym](https://github.com/nilphym).
+- Updated react-scripts from 4.0.1 to 4.0.3 [@nilphym](https://github.com/nilphym).
+- CurrencyTable no longer hides table on error, instead shows last fetched data in table [@nilphym](https://github.com/nilphym).
 
 ## [1.1.0] - 2021-07-10
 
