@@ -10,6 +10,14 @@
     "react/jsx-one-expression-per-line": [1, { "allow": "single-child" }],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-props-no-spreading": "off",
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    "no-unused-vars": "warn",
+    "no-plusplus": "off",
+    "no-restricted-syntax": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "no-shadow": "off",
+    "import/prefer-default-export": "off",
+    "max-len": ["error", 120],
+    "no-param-reassign": "off"
   }
 }

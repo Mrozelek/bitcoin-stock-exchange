@@ -1,0 +1,7 @@
+.wrapper {
+  box-sizing: border-box;
+  height: 100vh;
+  padding: 1em 0;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+}

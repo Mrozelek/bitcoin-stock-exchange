@@ -1,41 +1,26 @@
 import React from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import './App.scss';
-import About from './components/About';
-import Home from './components/Home';
+import databaseService from './services/databaseService';
+import { USERS_PROFILES_KEY } from './utils/constants';
+import SiteHeading from './containers/SiteHeading';
+import MarketPage from './containers/MarketPage';
+import { wrapper } from './App.module.scss';
 
-function App() {
-  const counter = useSelector((state) => state.counterReducer);
-  const isLogged = useSelector((state) => state.loggedReducer);
+const App = () => {
+  databaseService.setItem(USERS_PROFILES_KEY, [{
+    userId: 1,
+    funds: {
+      ETH: 5,
+      USD: 10
+    },
+    transactions: []
+  }]);
+
   return (
-    <>
-      <div>
-        <p>
-          Counter
-          {` ${counter}`}
-        </p>
-        <p>
-          Logged:
-          {` ${isLogged ? 'yes' : 'no'}`}
-        </p>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-          </ul>
-        </nav>
-        <Switch>
-          <Route path="/about" component={About} />
-          <Route path="/" component={Home} />
-        </Switch>
-      </div>
-    </>
+    <div className={wrapper}>
+      <SiteHeading />
+      <MarketPage />
+    </div>
   );
-}
+};
 
 export default App;

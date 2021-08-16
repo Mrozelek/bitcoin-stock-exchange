@@ -1,0 +1,25 @@
+.wrapper {
+  height: 100%;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  gap: 2em;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+}
+
+.buttonContainer {
+  margin-left: auto;
+
+  button + button {
+    margin-left: 1em;
+  }
+}
