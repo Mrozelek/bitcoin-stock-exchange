@@ -5,9 +5,11 @@ import { useForm, Controller } from 'react-hook-form';
 import * as Component from '@material-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 import styles from './transaction.module.scss';
 import Text from '../../components/Text';
 import { makeExchange } from '../../redux/reducers/exchange/actions';
+import { DEFAULT_CRYPTO } from '../../utils/constants';
 
 const defaultValues = {
   isBuying: true,
@@ -34,6 +36,15 @@ const schema = yup.object().shape({
     .required(errorMessages.required)
 });
 
+const getCurrencyPrice = (
+  { stockExchangeData, currencyName }
+) => stockExchangeData.find((dataItem) => dataItem.name === currencyName)?.price || '';
+
+const calculateTotalPrice = ({ stockExchangeData, currencyName, amount }) => {
+  const total = stockExchangeData.find((dataItem) => dataItem.name === currencyName)?.price * amount;
+  return parseFloat(total.toFixed(4));
+};
+
 const Transaction = ({ stockExchangeData }) => {
   const {
     reset,
@@ -49,8 +60,34 @@ const Transaction = ({ stockExchangeData }) => {
     resolver: yupResolver(schema)
   });
 
-  const [isBuying, currencyName, amount] = [watch('isBuying'), watch('currencyName'), watch('amount')];
+  const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
+  const { currency: currencyUrlParam } = useParams();
+  const [isBuying, currencyName, amount] = [watch('isBuying'), watch('currencyName'), watch('amount')];
+
+  const isCurrencyAvailable = (name) => stockExchangeData.map((currency) => currency.name).includes(name);
+
+  useEffect(() => {
+    if (currencyName) {
+      const locationWithoutCurrencyName = location.pathname.slice(0, -currencyUrlParam.length);
+      history.push(`${locationWithoutCurrencyName}${currencyName}`);
+    } else if (isCurrencyAvailable(currencyUrlParam)) {
+      setValue('currencyName', currencyUrlParam);
+    } else {
+      setValue('currencyName', DEFAULT_CRYPTO);
+    }
+  }, [currencyUrlParam, currencyName]);
+
+  useEffect(() => {
+    setValue('price', getCurrencyPrice({ stockExchangeData, currencyName }));
+  }, [currencyName, stockExchangeData]);
+
+  useEffect(() => {
+    if (amount && currencyName && !errors.amount) {
+      setValue('total', calculateTotalPrice({ stockExchangeData, currencyName, amount: getValues('amount') }));
+    }
+  }, [amount, currencyName, errors.amount, stockExchangeData]);
 
   const onSubmit = (data) => {
     const { amount, currencyName, isBuying, price } = data;
@@ -58,17 +95,6 @@ const Transaction = ({ stockExchangeData }) => {
     // TODO: this is temporary ID and should be replaced by real user ID
     dispatch(makeExchange({ userId: 1, amount, currencyName, isBuying, price }));
   };
-
-  useEffect(() => {
-    setValue('price', stockExchangeData.find((dataItem) => dataItem.name === currencyName)?.price || '');
-  }, [currencyName, stockExchangeData]);
-
-  useEffect(() => {
-    if (amount && currencyName && !errors.amount) {
-      const total = stockExchangeData.find((dataItem) => dataItem.name === currencyName)?.price * getValues('amount');
-      setValue('total', parseFloat(total.toFixed(2)));
-    }
-  }, [amount, currencyName, errors.amount, stockExchangeData]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.wrapper}>
