@@ -1,14 +1,13 @@
-import React from 'react';
 import axios from 'axios';
 import configureMockStore from 'redux-mock-store';
-import { render } from '@testing-library/react';
 import thunk from 'redux-thunk';
-import { SnackbarProvider } from 'notistack';
-import { SnackbarUtilsConfigurator } from '../../../utils/SnackbarUtils';
+import { snackActions } from '../../../utils/SnackbarUtils';
 import * as actions from './actions';
 import reducer, { initialState } from './reducer';
 
 jest.mock('axios');
+const toastSpy = jest.spyOn(snackActions, 'toast');
+const dismissSpy = jest.spyOn(snackActions, 'dismiss');
 
 describe('Action creators', () => {
   it('should create an action to initialize a get stock data request', () => {
@@ -60,7 +59,6 @@ describe('Async action creator', () => {
   let store;
 
   beforeEach(() => {
-    render(<SnackbarProvider><SnackbarUtilsConfigurator /></SnackbarProvider>);
     store = mockStore({});
   });
 
@@ -68,6 +66,7 @@ describe('Async action creator', () => {
     axios.get.mockImplementationOnce(() => Promise.resolve({ data: sampleResponse }));
 
     await store.dispatch(actions.getTickers());
+    expect(dismissSpy).toHaveBeenCalled();
     expect(store.getActions()).toEqual(expectedSuccessActions);
   });
 
@@ -75,6 +74,7 @@ describe('Async action creator', () => {
     axios.get.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch data')));
 
     await store.dispatch(actions.getTickers());
+    expect(toastSpy).toHaveBeenCalled();
     expect(store.getActions()).toEqual(expectedFailureActions);
   });
 });
