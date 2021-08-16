@@ -13,7 +13,7 @@ import { DEFAULT_CRYPTO } from '../../utils/constants';
 
 const defaultValues = {
   isBuying: true,
-  currencyName: '',
+  currencyName: DEFAULT_CRYPTO,
   price: '',
   amount: 0,
   total: ''
@@ -64,13 +64,15 @@ const Transaction = ({ stockExchangeData }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { currency: currencyUrlParam } = useParams();
-  const [isBuying, currencyName, amount] = [watch('isBuying'), watch('currencyName'), watch('amount')];
+  const [
+    isBuying, price, currencyName, amount
+  ] = [watch('isBuying'), watch('price'), watch('currencyName'), watch('amount')];
 
   const isCurrencyAvailable = (name) => stockExchangeData.map((currency) => currency.name).includes(name);
 
   useEffect(() => {
     if (currencyName) {
-      const locationWithoutCurrencyName = location.pathname.slice(0, -currencyUrlParam.length);
+      const locationWithoutCurrencyName = location.pathname.slice(0, -currencyUrlParam?.length);
       history.push(`${locationWithoutCurrencyName}${currencyName}`);
     } else if (isCurrencyAvailable(currencyUrlParam)) {
       setValue('currencyName', currencyUrlParam);
@@ -81,7 +83,7 @@ const Transaction = ({ stockExchangeData }) => {
 
   useEffect(() => {
     setValue('price', getCurrencyPrice({ stockExchangeData, currencyName }));
-  }, [currencyName, stockExchangeData]);
+  }, [currencyName, stockExchangeData, price]);
 
   useEffect(() => {
     if (amount && currencyName && !errors.amount) {

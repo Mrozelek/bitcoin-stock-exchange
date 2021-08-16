@@ -1,9 +1,12 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import configureStore from '../../redux/configureStore';
 import { StockBuilder } from '../../utils/stockBuilder';
 import Transaction, { errorMessages } from './Transaction';
+import { DEFAULT_CRYPTO } from '../../utils/constants';
 
 const sampleData = [
   {
@@ -62,6 +65,8 @@ const sampleData = [
   }
 ];
 
+const history = createMemoryHistory();
+
 describe('Transaction', () => {
   const stockExchangeData = sampleData.map((data) => new StockBuilder()
     .setName(data.name)
@@ -72,7 +77,13 @@ describe('Transaction', () => {
   beforeEach(async () => {
     await act(async () => {
       const store = configureStore();
-      render(<Provider store={store}><Transaction stockExchangeData={stockExchangeData} /></Provider>);
+      render(
+        <Router history={history}>
+          <Provider store={store}>
+            <Transaction stockExchangeData={stockExchangeData} />
+          </Provider>
+        </Router>
+      );
     });
   });
 
@@ -82,7 +93,7 @@ describe('Transaction', () => {
       fireEvent.submit(screen.getByRole('button', { name: 'Confirm' }));
     });
 
-    expect(screen.getAllByText(errorMessages.required)).toHaveLength(2);
+    expect(screen.getAllByText(errorMessages.required)).toHaveLength(1);
   });
 
   it('should display positive number error when amount field is negative or neutral', async () => {
@@ -117,7 +128,7 @@ describe('Transaction', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
     });
     expect(screen.getByLabelText('Amount').value).toBe('0');
-    expect(screen.getByTestId('currencyName').value).toBe('');
+    expect(screen.getByTestId('currencyName').value).toBe(DEFAULT_CRYPTO);
   });
 
   describe('when choose currency type', () => {
@@ -139,7 +150,7 @@ describe('Transaction', () => {
       });
 
       it('should update total value', () => {
-        expect(screen.getByLabelText('Total').value).toBe('2821426.79');
+        expect(screen.getByLabelText('Total').value).toBe('2821426.794');
       });
 
       describe('and when change currenty type again', () => {
@@ -151,7 +162,7 @@ describe('Transaction', () => {
 
         it('should update price and total values', async () => {
           expect(screen.getByLabelText('Price').value).toBe('6138.07');
-          expect(screen.getByLabelText('Total').value).toBe('93912.47');
+          expect(screen.getByLabelText('Total').value).toBe('93912.471');
         });
       });
     });

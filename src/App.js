@@ -27,7 +27,7 @@ const App = () => {
         <Route exact path="/">
           <Redirect to={`/exchange/${DEFAULT_CRYPTO}`} />
         </Route>
-        <Route exact path="/exchange/:currency">
+        <Route exact path="/exchange/:currency?">
           <MarketPage />
         </Route>
       </Switch>
