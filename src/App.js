@@ -14,6 +14,7 @@ const App = () => {
     },
     transactions: []
   }]);
+
   return (
     <div className={wrapper}>
       <SiteHeading />
