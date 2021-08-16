@@ -11,7 +11,7 @@ let canShowSpinner;
 
 const MarketPage = () => {
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.stock);
+  const { isLoading, stockData } = useSelector((state) => state.stock);
 
   useEffect(() => {
     canShowSpinner = true;
@@ -24,7 +24,7 @@ const MarketPage = () => {
     };
   }, []);
 
-  if (isLoading && canShowSpinner) {
+  if ((isLoading && canShowSpinner) || !stockData.length) {
     return <CircularProgress className={spinner} />;
   }
 
