@@ -1,22 +1,34 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Transaction from '../Transaction';
 import Table from '../CurrencyTable';
-import { wrapper, table, transaction } from './marketPage.module.scss';
+import { wrapper, table, transaction, spinner } from './marketPage.module.scss';
 import { getTickers } from '../../redux/reducers/stock/actions';
 import { API_CALL_INTERVAL } from '../../utils/constants';
 
+let canShowSpinner;
+
 const MarketPage = () => {
   const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.stock);
 
   useEffect(() => {
+    canShowSpinner = true;
+
     dispatch(getTickers());
-    const intervalID = setInterval(() => dispatch(getTickers()), API_CALL_INTERVAL);
+    const apiCallIntervalID = setInterval(() => dispatch(getTickers()), API_CALL_INTERVAL);
 
     return () => {
-      clearInterval(intervalID);
+      clearInterval(apiCallIntervalID);
     };
   }, []);
+
+  if (isLoading && canShowSpinner) {
+    return <CircularProgress className={spinner} />;
+  }
+
+  canShowSpinner = false;
 
   return (
     <div className={wrapper}>
