@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Cache busting for stock data fetching [@nilphym](https://github.com/nilphym).
 - Notification API with notistack [@nilphym](https://github.com/nilphym).
 - Notifications that inform user about various events [@nilphym](https://github.com/nilphym).
+- Routing integration with transactions [@nilphym](https://github.com/nilphym).
 
 ### Changed
 
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stock builder uses cryptocurrency name as uuid [@nilphym](https://github.com/nilphym).
 - Updated react-scripts from 4.0.1 to 4.0.3 [@nilphym](https://github.com/nilphym).
 - CurrencyTable no longer hides table on error, instead shows last fetched data in table [@nilphym](https://github.com/nilphym).
+- Spinner has been moved to MarketPage [@nilphym](https://github.com/nilphym).
 
 ## [1.1.0] - 2021-07-10
 
