@@ -20,11 +20,11 @@ describe('getFunds function', () => {
   });
 
   it('should return amount of currency correctly', async () => {
-    expect(await walletService.getFunds({ userId: 1, currencyName: 'ETH' })).toBe(100);
+    expect(await walletService.getFunds({ userId: 1, currency: 'ETH' })).toBe(100);
   });
 
   it('should return 0 if user have no such currency', async () => {
-    expect(await walletService.getFunds({ userId: 1, currencyName: 'BTC' })).toBe(0);
+    expect(await walletService.getFunds({ userId: 1, currency: 'BTC' })).toBe(0);
   });
 
   it('should return all funds', async () => {
@@ -42,7 +42,7 @@ describe('addFunds function', () => {
   });
 
   it('should add currency successfully', async () => {
-    await walletService.addFunds({ userId: 1, currencyName: 'ETH', amount: 20 });
+    await walletService.addFunds({ userId: 1, currency: 'ETH', amount: 20 });
     expect((await databaseService.getItem(USERS_PROFILES_KEY))[0].funds).toStrictEqual({ USD: 50, ETH: 120 });
   });
 });
@@ -57,7 +57,7 @@ describe('subtractFunds function', () => {
   });
 
   it('should subtract currency successfully', async () => {
-    await walletService.subtractFunds({ userId: 1, currencyName: 'USD', amount: 20 });
+    await walletService.subtractFunds({ userId: 1, currency: 'USD', amount: 20 });
     expect((await databaseService.getItem(USERS_PROFILES_KEY))[0].funds).toStrictEqual({ USD: 30, ETH: 100 });
   });
 });

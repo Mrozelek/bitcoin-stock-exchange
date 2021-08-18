@@ -6120,6 +6120,7 @@ __metadata:
     "@wojtekmaj/enzyme-adapter-react-17": ^0.4.1
     axios: ^0.21.1
     babel-eslint: ^10.1.0
+    capitalize: ^2.0.3
     connected-react-router: ^6.8.0
     enzyme: ^3.11.0
     eslint: ^7.17.0
@@ -6698,6 +6699,13 @@ __metadata:
   version: 1.0.30001179
   resolution: "caniuse-lite@npm:1.0.30001179"
   checksum: 04707a2d8a37796a9abb6b0d7d7466818cbe968d1cff133a6d355989c0c683065c64403716e69c13e9cd23c6eb346711a51e9b067b831b2564fbc0ef64f63645
+  languageName: node
+  linkType: hard
+
+"capitalize@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "capitalize@npm:2.0.3"
+  checksum: 27ee9a26789b7a34b0efc0fb1d962c3fb8a3d0549a39f71bfba7d9d312bf159c83c2195f1d1ae260fe491183e990654d2677aaf2cd42d0bb384244132b5125f4
   languageName: node
   linkType: hard
 

@@ -7,15 +7,11 @@ import { wrapper, table, transaction, spinner } from './marketPage.module.scss';
 import { getTickers } from '../../redux/reducers/stock/actions';
 import { API_CALL_INTERVAL } from '../../utils/constants';
 
-let canShowSpinner;
-
 const MarketPage = () => {
   const dispatch = useDispatch();
-  const { isLoading, stockData } = useSelector((state) => state.stock);
+  const { stockData } = useSelector((state) => state.stock);
 
   useEffect(() => {
-    canShowSpinner = true;
-
     dispatch(getTickers());
     const apiCallIntervalID = setInterval(() => dispatch(getTickers()), API_CALL_INTERVAL);
 
@@ -24,11 +20,9 @@ const MarketPage = () => {
     };
   }, []);
 
-  if ((isLoading && canShowSpinner) || !stockData.length) {
+  if (!stockData.length) {
     return <CircularProgress className={spinner} />;
   }
-
-  canShowSpinner = false;
 
   return (
     <div className={wrapper}>

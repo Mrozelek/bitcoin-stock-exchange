@@ -21,14 +21,14 @@ describe('validateIfUserHasSufficientFunds function', () => {
     expect(validateIfUserHasSufficientFunds({
       userId: 1,
       wallet: walletService,
-      currencyName: 'ETH',
+      currency: 'ETH',
       amountToPay: 2
     })).resolves.not.toThrow();
 
     expect(validateIfUserHasSufficientFunds({
       userId: 1,
       wallet: walletService,
-      currencyName: 'ETH',
+      currency: 'ETH',
       amountToPay: 5
     })).resolves.not.toThrow();
   });
@@ -37,7 +37,7 @@ describe('validateIfUserHasSufficientFunds function', () => {
     expect(validateIfUserHasSufficientFunds({
       userId: 1,
       wallet: walletService,
-      currencyName: 'ETH',
+      currency: 'ETH',
       amountToPay: 10
     })).rejects.toThrow(new NotEnoughFundsError());
   });
