@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router-dom';
+import { Router, useLocation } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import capitalize from 'capitalize';
@@ -65,26 +65,33 @@ const sampleData = [
   }
 ];
 
+const stockExchangeData = sampleData.map((data) => new StockBuilder()
+  .setName(data.name)
+  .setChange(data.change)
+  .setPrice(data.price)
+  .build());
+
 const history = createMemoryHistory();
+const store = configureStore();
 
 const amountFieldLabelName = capitalize(fields.amount);
 const priceFieldLabelName = capitalize(fields.price);
 const totalFieldLabelName = capitalize(fields.total);
 
-describe('Transaction', () => {
-  const stockExchangeData = sampleData.map((data) => new StockBuilder()
-    .setName(data.name)
-    .setChange(data.change)
-    .setPrice(data.price)
-    .build());
+const LocationDisplay = () => {
+  const location = useLocation();
 
+  return <div data-testid="location-display">{location.pathname}</div>;
+};
+
+describe('Transaction', () => {
   beforeEach(async () => {
     await act(async () => {
-      const store = configureStore();
       render(
         <Router history={history}>
           <Provider store={store}>
             <Transaction stockExchangeData={stockExchangeData} />
+            <LocationDisplay />
           </Provider>
         </Router>
       );
@@ -170,5 +177,38 @@ describe('Transaction', () => {
         });
       });
     });
+  });
+
+  it('should not change correct route', () => {
+    history.push('/exchange/');
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/');
+
+    history.push('/exchange/ETH');
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/ETH');
+  });
+
+  it('should change incorrect route', () => {
+    history.push('/exchange/GRGRS');
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/');
+  });
+
+  it('should change route when currency changes', () => {
+    history.push('/exchange/');
+
+    act(() => {
+      fireEvent.input(screen.getByTestId(fields.currency), { target: { value: 'BTC' } });
+    });
+
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/BTC');
+  });
+
+  it('should change route when reset button is clicked', () => {
+    history.push('/exchange/BTC');
+
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
+    });
+
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/');
   });
 });
