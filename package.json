@@ -1,4 +1,5 @@
 {
+  "homepage": "https://bitcoinstockexchangeteam.github.io/bitcoin-stock-exchange",
   "name": "bitcoin-stock-exchange",
   "version": "0.1.0",
   "private": true,
@@ -37,7 +38,8 @@
     "lint": "eslint 'src/**/*.{js,jsx}'",
     "lint:scss": "stylelint src/**/*.scss",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "deploy": "react-scripts build && gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -79,6 +81,7 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-testing-library": "^3.10.1",
+    "gh-pages": "^3.1.0",
     "husky": "^4.3.7",
     "lint-staged": "^10.5.3",
     "redux-mock-store": "^1.5.4",
