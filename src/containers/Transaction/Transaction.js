@@ -83,7 +83,7 @@ const Transaction = ({ stockExchangeData }) => {
   useEffect(() => {
     if (isCurrencyAvailable(currencyUrlParam?.toUpperCase())) {
       setValue(fields.currency, currencyUrlParam.toUpperCase());
-    } else {
+    } else if (currencyUrlParam) {
       history.push(`${getLocationWithoutCurrency()}${getValues(fields.currency)}`);
     }
   }, []);
