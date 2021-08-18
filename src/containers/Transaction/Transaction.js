@@ -5,13 +5,13 @@ import { useForm, Controller } from 'react-hook-form';
 import * as Component from '@material-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import * as capitalize from 'capitalize';
+import capitalize from 'capitalize';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 import styles from './transaction.module.scss';
 import Text from '../../components/Text';
 import { makeExchange } from '../../redux/reducers/exchange/actions';
 
-const fields = {
+export const fields = {
   isBuying: 'isBuying',
   currency: 'currency',
   price: 'price',
