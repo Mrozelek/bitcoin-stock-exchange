@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Routing integration with transactions [@nilphym](https://github.com/nilphym).
 - Github deploy script [@nilphym](https://github.com/nilphym).
 - Github deploy action [@nilphym](https://github.com/nilphym).
+- Currency preview at Market Page [@nilphym](https://github.com/nilphym).
 
 ### Changed
 
@@ -31,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated react-scripts from 4.0.1 to 4.0.3 [@nilphym](https://github.com/nilphym).
 - CurrencyTable no longer hides table on error, instead shows last fetched data in table [@nilphym](https://github.com/nilphym).
 - Spinner has been moved to MarketPage [@nilphym](https://github.com/nilphym).
+- Market Page now has two text fields per row [@nilphym](https://github.com/nilphym).
 
 ## [1.1.0] - 2021-07-10
 
