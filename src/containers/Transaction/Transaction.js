@@ -36,7 +36,7 @@ const defaultValues = {
 export const errorMessages = {
   required: 'The field is required',
   typeError: 'Value must be a number',
-  min: 'Amount must be a positive number'
+  min: 'Amount must be greater than 0.0001'
 };
 
 const schema = yup.object().shape({
@@ -44,10 +44,9 @@ const schema = yup.object().shape({
     .string()
     .required(errorMessages.required),
   [fields.amount]: yup
-    .number(errorMessages.typeError)
-    .positive(errorMessages.min)
-    .transform((val) => (Number.isNaN(val) ? undefined : val))
-    .required(errorMessages.required)
+    .number()
+    .typeError(errorMessages.typeError)
+    .min(0.0001, errorMessages.min)
 });
 
 const getCurrencyPrice = (
