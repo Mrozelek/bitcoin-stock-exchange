@@ -7,6 +7,8 @@ import capitalize from 'capitalize';
 import configureStore from '../../redux/configureStore';
 import { StockBuilder } from '../../utils/stockBuilder';
 import Transaction, { fields, errorMessages } from './Transaction';
+import databaseService from '../../services/databaseService';
+import { USERS_PROFILES_KEY } from '../../utils/constants';
 
 const sampleData = [
   {
@@ -85,6 +87,17 @@ const LocationDisplay = () => {
 };
 
 describe('Transaction', () => {
+  beforeAll(async () => {
+    await databaseService.setItem(USERS_PROFILES_KEY, [{
+      userId: 1,
+      funds: {
+        ETH: 5,
+        USD: 10
+      },
+      transactions: []
+    }]);
+  });
+
   beforeEach(async () => {
     await act(async () => {
       render(
