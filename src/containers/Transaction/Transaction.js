@@ -73,7 +73,7 @@ const Transaction = ({ stockExchangeData }) => {
   });
 
   const history = useHistory();
-  const location = useLocation();
+  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { currency: currencyUrlParam } = useParams();
 
@@ -84,7 +84,7 @@ const Transaction = ({ stockExchangeData }) => {
   const isCurrencyAvailable = (name) => stockExchangeData.some((currency) => currency.name === name);
 
   const getLocationWithoutCurrency = () => (
-    currencyUrlParam ? location.pathname.slice(0, -currencyUrlParam.length) : location.pathname
+    currencyUrlParam ? pathname.slice(0, -currencyUrlParam.length) : pathname
   );
 
   const checkIfUrlParamIsValid = () => isCurrencyAvailable(currencyUrlParam?.toUpperCase());
@@ -96,7 +96,7 @@ const Transaction = ({ stockExchangeData }) => {
   const validateRoute = () => {
     if (checkIfUrlParamIsValid()) {
       setValue(fields.currency, currencyUrlParam.toUpperCase());
-    } else if (currencyUrlParam) {
+    } else if (currencyUrlParam !== 'transactionHistory') {
       updateRoute();
     }
   };
@@ -149,8 +149,8 @@ const Transaction = ({ stockExchangeData }) => {
     reset(defaultValues);
 
     const locationWithoutCurrency = getLocationWithoutCurrency();
-    if (location.pathname !== locationWithoutCurrency) {
-      history.push(`${locationWithoutCurrency}`);
+    if (pathname !== locationWithoutCurrency) {
+      history.push(locationWithoutCurrency);
     }
   };
 

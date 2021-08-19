@@ -8,6 +8,7 @@ import databaseService from './services/databaseService';
 import { USERS_PROFILES_KEY, DEFAULT_CRYPTO } from './utils/constants';
 import SiteHeading from './containers/SiteHeading';
 import MarketPage from './containers/MarketPage';
+import TransactionHistoryModal from './containers/TransactionHistoryModal';
 import { wrapper } from './App.module.scss';
 
 const App = () => {
@@ -24,10 +25,11 @@ const App = () => {
     <div className={wrapper}>
       <SiteHeading />
       <Switch>
-        <Route exact path="/">
-          <Redirect to={`/exchange/${DEFAULT_CRYPTO}`} />
+        <Redirect exact from="/" to={`/exchange/${DEFAULT_CRYPTO}`} />
+        <Route path="/exchange/:currency?">
+          <MarketPage />
+          <Route path="/exchange/:currency?/transactionHistory" component={TransactionHistoryModal} />
         </Route>
-        <Route path="/exchange/:currency?" component={MarketPage} />
       </Switch>
     </div>
   );
