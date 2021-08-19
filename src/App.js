@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Route,
   Redirect,
@@ -10,25 +10,33 @@ import SiteHeading from './containers/SiteHeading';
 import MarketPage from './containers/MarketPage';
 import TransactionHistoryModal from './containers/TransactionHistoryModal';
 import { wrapper } from './App.module.scss';
+import { exchangeRoute, transactionHistoryRoute } from './utils/routes';
+import useUserId from './hooks/useUserId';
 
 const App = () => {
-  databaseService.setItem(USERS_PROFILES_KEY, [{
-    userId: 1,
-    funds: {
-      ETH: 5,
-      USD: 10
-    },
-    transactions: []
-  }]);
+  const [userId] = useUserId();
+
+  useEffect(() => {
+    databaseService.setItem(USERS_PROFILES_KEY, [{
+      userId,
+      funds: {
+        ETH: 5,
+        USD: 10
+      },
+      transactions: []
+    }]);
+  }, []);
 
   return (
     <div className={wrapper}>
       <SiteHeading />
       <Switch>
-        <Redirect exact from="/" to={`/exchange/${DEFAULT_CRYPTO}`} />
-        <Route path="/exchange/:currency?">
+        <Redirect exact from="/" to={`${exchangeRoute}/${DEFAULT_CRYPTO}`} />
+        <Route path={`${exchangeRoute}/:currency?`}>
           <MarketPage />
-          <Route path="/exchange/:currency?/transactionHistory" component={TransactionHistoryModal} />
+          <Route path={`${exchangeRoute}/:currency?${transactionHistoryRoute}`}>
+            <TransactionHistoryModal />
+          </Route>
         </Route>
       </Switch>
     </div>

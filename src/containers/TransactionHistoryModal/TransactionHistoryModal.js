@@ -1,32 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { getUserById } from '../../services/databaseService';
-import { getScrollbarWidth } from '../../utils/utils';
-
-const useStyles = makeStyles((theme) => ({
-  modalBackground: {
-    position: 'fixed',
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 1
-  },
-  modal: {
-    width: 830,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2)
-  }
-}));
+import Modal from '../../components/Modal/Modal';
+import { exchangeRoute } from '../../utils/routes';
+import useUserId from '../../hooks/useUserId';
 
 const columns = [
   {
@@ -82,54 +61,32 @@ const mapTransactionsToGridData = (transactions) => {
 };
 
 const TransactionHistoryModal = () => {
-  const classes = useStyles();
   const history = useHistory();
   const [transactions, setTransactions] = useState([]);
+  const { params: { currency } } = useRouteMatch();
+  const [userId] = useUserId();
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight = `${getScrollbarWidth()}px`;
-
     const setUserTransactions = async (userId) => {
       setTransactions((await getUserById(userId)).transactions);
     };
-    setUserTransactions(1);
-
-    return (() => {
-      document.body.style.overflow = 'visible';
-      document.body.style.paddingRight = 0;
-    });
+    setUserTransactions(userId);
   }, []);
 
-  const handleClose = () => {
-    history.push(history.location.pathname.slice(0, -18));
-  };
-
-  const handleCloseByEscape = (evt) => {
-    if ((evt.charCode || evt.keyCode) === 27) {
-      handleClose();
-    }
+  const onClose = () => {
+    history.push(currency ? `${exchangeRoute}/${currency}` : exchangeRoute);
   };
 
   return (
-    <div
-      className={classes.modalBackground}
-      role="button"
-      tabIndex="0"
-      onClick={handleClose}
-      onKeyDown={handleCloseByEscape}
-    >
-      {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
-      <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
-        <DataGrid
-          rows={mapTransactionsToGridData(transactions)}
-          columns={columns}
-          pageSize={5}
-          disableSelectionOnClick
-          autoHeight
-        />
-      </div>
-    </div>
+    <Modal show onClose={onClose}>
+      <DataGrid
+        rows={mapTransactionsToGridData(transactions)}
+        columns={columns}
+        pageSize={5}
+        disableSelectionOnClick
+        autoHeight
+      />
+    </Modal>
   );
 };
 

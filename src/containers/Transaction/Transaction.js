@@ -12,6 +12,8 @@ import Text from '../../components/Text';
 import { makeExchange } from '../../redux/reducers/exchange/actions';
 import { BASE_CURRENCY } from '../../utils/constants';
 import { getUserById } from '../../services/databaseService';
+import { exchangeRoute } from '../../utils/routes';
+import useUserId from '../../hooks/useUserId';
 
 export const fields = {
   isBuying: 'isBuying',
@@ -76,21 +78,16 @@ const Transaction = ({ stockExchangeData }) => {
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { currency: currencyUrlParam } = useParams();
-
-  const userId = 1;
+  const [userId] = useUserId();
 
   const isBuying = watch(fields.isBuying);
 
   const isCurrencyAvailable = (name) => stockExchangeData.some((currency) => currency.name === name);
 
-  const getLocationWithoutCurrency = () => (
-    currencyUrlParam ? pathname.slice(0, -currencyUrlParam.length) : pathname
-  );
-
   const checkIfUrlParamIsValid = () => isCurrencyAvailable(currencyUrlParam?.toUpperCase());
 
   const updateRoute = () => {
-    history.push(`${getLocationWithoutCurrency()}${getValues(fields.currency)}`);
+    history.push(`${exchangeRoute}/${getValues(fields.currency)}`);
   };
 
   const validateRoute = () => {
@@ -148,9 +145,8 @@ const Transaction = ({ stockExchangeData }) => {
   const onReset = () => {
     reset(defaultValues);
 
-    const locationWithoutCurrency = getLocationWithoutCurrency();
-    if (pathname !== locationWithoutCurrency) {
-      history.push(locationWithoutCurrency);
+    if (pathname !== exchangeRoute) {
+      history.push(exchangeRoute);
     }
   };
 
