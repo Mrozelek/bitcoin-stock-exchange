@@ -1,6 +1,11 @@
 import React from 'react';
+import {
+  Route,
+  Redirect,
+  Switch
+} from 'react-router-dom';
 import databaseService from './services/databaseService';
-import { USERS_PROFILES_KEY } from './utils/constants';
+import { USERS_PROFILES_KEY, DEFAULT_CRYPTO } from './utils/constants';
 import SiteHeading from './containers/SiteHeading';
 import MarketPage from './containers/MarketPage';
 import { wrapper } from './App.module.scss';
@@ -18,7 +23,12 @@ const App = () => {
   return (
     <div className={wrapper}>
       <SiteHeading />
-      <MarketPage />
+      <Switch>
+        <Route exact path="/">
+          <Redirect to={`/exchange/${DEFAULT_CRYPTO}`} />
+        </Route>
+        <Route path="/exchange/:currency?" component={MarketPage} />
+      </Switch>
     </div>
   );
 };

@@ -1,9 +1,12 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import { Router, useLocation } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import { render, screen, fireEvent, act } from '@testing-library/react';
+import capitalize from 'capitalize';
 import configureStore from '../../redux/configureStore';
 import { StockBuilder } from '../../utils/stockBuilder';
-import Transaction, { errorMessages } from './Transaction';
+import Transaction, { fields, errorMessages } from './Transaction';
 
 const sampleData = [
   {
@@ -62,23 +65,42 @@ const sampleData = [
   }
 ];
 
-describe('Transaction', () => {
-  const stockExchangeData = sampleData.map((data) => new StockBuilder()
-    .setName(data.name)
-    .setChange(data.change)
-    .setPrice(data.price)
-    .build());
+const stockExchangeData = sampleData.map((data) => new StockBuilder()
+  .setName(data.name)
+  .setChange(data.change)
+  .setPrice(data.price)
+  .build());
 
+const history = createMemoryHistory();
+const store = configureStore();
+
+const amountFieldLabelName = capitalize(fields.amount);
+const priceFieldLabelName = capitalize(fields.price);
+const totalFieldLabelName = capitalize(fields.total);
+
+const LocationDisplay = () => {
+  const location = useLocation();
+
+  return <div data-testid="location-display">{location.pathname}</div>;
+};
+
+describe('Transaction', () => {
   beforeEach(async () => {
     await act(async () => {
-      const store = configureStore();
-      render(<Provider store={store}><Transaction stockExchangeData={stockExchangeData} /></Provider>);
+      render(
+        <Router history={history}>
+          <Provider store={store}>
+            <Transaction stockExchangeData={stockExchangeData} />
+            <LocationDisplay />
+          </Provider>
+        </Router>
+      );
     });
   });
 
   it('should display required error when values are empty', async () => {
     await act(async () => {
-      fireEvent.input(screen.getByLabelText('Amount'), { target: { value: '' } });
+      fireEvent.input(screen.getByLabelText(amountFieldLabelName), { target: { value: '' } });
       fireEvent.submit(screen.getByRole('button', { name: 'Confirm' }));
     });
 
@@ -90,7 +112,7 @@ describe('Transaction', () => {
 
     for await (const value of testValues) {
       await act(async () => {
-        fireEvent.input(screen.getByLabelText('Amount'), { target: { value } });
+        fireEvent.input(screen.getByLabelText(amountFieldLabelName), { target: { value } });
         fireEvent.submit(screen.getByRole('button', { name: 'Confirm' }));
       });
       expect(screen.getByText(errorMessages.min)).toBeInTheDocument();
@@ -107,53 +129,86 @@ describe('Transaction', () => {
 
   it('should reset form when reset button is clicked', async () => {
     await act(async () => {
-      fireEvent.input(screen.getByLabelText('Amount'), { target: { value: 15.3 } });
-      fireEvent.input(screen.getByTestId('currencyName'), { target: { value: 'ETH' } });
+      fireEvent.input(screen.getByLabelText(amountFieldLabelName), { target: { value: 15.3 } });
+      fireEvent.input(screen.getByTestId(fields.currency), { target: { value: 'ETH' } });
     });
-    expect(screen.getByLabelText('Amount').value).toBe('15.3');
-    expect(screen.getByTestId('currencyName').value).toBe('ETH');
+    expect(screen.getByLabelText(amountFieldLabelName).value).toBe('15.3');
+    expect(screen.getByTestId(fields.currency).value).toBe('ETH');
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
     });
-    expect(screen.getByLabelText('Amount').value).toBe('0');
-    expect(screen.getByTestId('currencyName').value).toBe('');
+    expect(screen.getByLabelText(amountFieldLabelName).value).toBe('0');
+    expect(screen.getByTestId(fields.currency).value).toBe('');
   });
 
   describe('when choose currency type', () => {
     beforeEach(async () => {
       await act(async () => {
-        fireEvent.input(screen.getByTestId('currencyName'), { target: { value: 'BTC' } });
+        fireEvent.input(screen.getByTestId(fields.currency), { target: { value: 'BTC' } });
       });
     });
 
     it('should display its price', () => {
-      expect(screen.getByLabelText('Price').value).toBe('184406.98');
+      expect(screen.getByLabelText(priceFieldLabelName).value).toBe('184406.9800');
     });
 
     describe('and when change amount value', () => {
       beforeEach(async () => {
         await act(async () => {
-          fireEvent.input(screen.getByLabelText('Amount'), { target: { value: 15.3 } });
+          fireEvent.input(screen.getByLabelText(amountFieldLabelName), { target: { value: 15.3 } });
         });
       });
 
       it('should update total value', () => {
-        expect(screen.getByLabelText('Total').value).toBe('2821426.79');
+        expect(screen.getByLabelText('Total').value).toBe('2821426.7940');
       });
 
       describe('and when change currenty type again', () => {
         beforeEach(async () => {
           await act(async () => {
-            fireEvent.input(screen.getByTestId('currencyName'), { target: { value: 'ETH' } });
+            fireEvent.input(screen.getByTestId(fields.currency), { target: { value: 'ETH' } });
           });
         });
 
         it('should update price and total values', async () => {
-          expect(screen.getByLabelText('Price').value).toBe('6138.07');
-          expect(screen.getByLabelText('Total').value).toBe('93912.47');
+          expect(screen.getByLabelText(priceFieldLabelName).value).toBe('6138.0700');
+          expect(screen.getByLabelText(totalFieldLabelName).value).toBe('93912.4710');
         });
       });
     });
+  });
+
+  it('should not change correct route', () => {
+    history.push('/exchange/');
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/');
+
+    history.push('/exchange/ETH');
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/ETH');
+  });
+
+  it('should change incorrect route', () => {
+    history.push('/exchange/GRGRS');
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/');
+  });
+
+  it('should change route when currency changes', () => {
+    history.push('/exchange/');
+
+    act(() => {
+      fireEvent.input(screen.getByTestId(fields.currency), { target: { value: 'BTC' } });
+    });
+
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/BTC');
+  });
+
+  it('should change route when reset button is clicked', () => {
+    history.push('/exchange/BTC');
+
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
+    });
+
+    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/');
   });
 });
