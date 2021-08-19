@@ -2,34 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
 import { useHistory } from 'react-router-dom';
-
-const getScrollbarWidth = () => {
-  const inner = document.createElement('p');
-  inner.style.width = '100%';
-  inner.style.height = '200px';
-
-  const outer = document.createElement('div');
-  outer.style.position = 'absolute';
-  outer.style.top = '0px';
-  outer.style.left = '0px';
-  outer.style.visibility = 'hidden';
-  outer.style.width = '200px';
-  outer.style.height = '150px';
-  outer.style.overflow = 'hidden';
-  outer.appendChild(inner);
-
-  document.body.appendChild(outer);
-  const w1 = inner.offsetWidth;
-  outer.style.overflow = 'scroll';
-  let w2 = inner.offsetWidth;
-  if (w1 === w2) {
-    w2 = outer.clientWidth;
-  }
-
-  document.body.removeChild(outer);
-
-  return (w1 - w2);
-};
+import { DateTime } from 'luxon';
+import { getUserById } from '../../services/databaseService';
+import { getScrollbarWidth } from '../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   modalBackground: {
@@ -45,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1
   },
   modal: {
-    width: 765,
+    width: 830,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -83,35 +58,42 @@ const columns = [
   {
     field: 'time',
     headerName: 'Time',
-    minWidth: 160
+    minWidth: 225
   }
 ];
+
+const mapTransactionsToGridData = (transactions) => {
+  let id = 1;
+  return transactions.map(({ time, transactionInfo, error }) => {
+    const { currency, amount, price, isBuying } = transactionInfo;
+    const getAction = () => {
+      const action = isBuying ? 'Buy' : 'Sell';
+      return error ? `${action} (Failed)` : action;
+    };
+    return {
+      id: id++,
+      currency,
+      amount,
+      price: price.toFixed(4),
+      action: getAction(),
+      time: DateTime.fromISO(time).toHTTP()
+    };
+  });
+};
 
 const TransactionHistoryModal = () => {
   const classes = useStyles();
   const history = useHistory();
-
-  const [rows, setRows] = useState([]);
-
-  const updateRoute = () => {
-    history.push(history.location.pathname.slice(0, -18));
-  };
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     document.body.style.paddingRight = `${getScrollbarWidth()}px`;
 
-    setRows([
-      { id: 1, currency: 'XRP', amount: 1, price: '1.1000', action: 'Buy', time: '2021-08-19 14:24:58' },
-      { id: 2, currency: 'XRP', amount: 1, price: '1.1000', action: 'Buy', time: '2021-08-19 14:24:58' },
-      { id: 3, currency: 'XRP', amount: 1, price: '1.1000', action: 'Buy', time: '2021-08-19 14:24:58' },
-      { id: 4, currency: 'XRP', amount: 1, price: '1.1000', action: 'Buy', time: '2021-08-19 14:24:58' },
-      { id: 5, currency: 'XRP', amount: 1, price: '1.1000', action: 'Buy', time: '2021-08-19 14:24:58' },
-      { id: 6, currency: 'XRP', amount: 1, price: '1.1000', action: 'Buy', time: '2021-08-19 14:24:58' },
-      { id: 7, currency: 'XRP', amount: 1, price: '1.1000', action: 'Buy', time: '2021-08-19 14:24:58' },
-      { id: 8, currency: 'XRP', amount: 1, price: '1.1000', action: 'Buy', time: '2021-08-19 14:24:58' },
-      { id: 9, currency: 'XRP', amount: 1, price: '1.1000', action: 'Buy', time: '2021-08-19 14:24:58' }
-    ]);
+    const setUserTransactions = async (userId) => {
+      setTransactions((await getUserById(userId)).transactions);
+    };
+    setUserTransactions(1);
 
     return (() => {
       document.body.style.overflow = 'visible';
@@ -120,7 +102,7 @@ const TransactionHistoryModal = () => {
   }, []);
 
   const handleClose = () => {
-    updateRoute();
+    history.push(history.location.pathname.slice(0, -18));
   };
 
   const handleCloseByEscape = (evt) => {
@@ -140,7 +122,7 @@ const TransactionHistoryModal = () => {
       {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
       <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
         <DataGrid
-          rows={rows}
+          rows={mapTransactionsToGridData(transactions)}
           columns={columns}
           pageSize={5}
           disableSelectionOnClick
