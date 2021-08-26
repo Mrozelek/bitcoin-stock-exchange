@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { getUserById } from '../../services/databaseService';
 import Modal from '../../components/Modal/Modal';
-import { exchangeRoute } from '../../utils/routes';
+import { transactionHistoryRoute } from '../../utils/routes';
 import useUserId from '../../hooks/useUserId';
 
 const columns = [
@@ -41,29 +41,30 @@ const columns = [
   }
 ];
 
-const mapTransactionsToGridData = (transactions) => {
-  let id = 1;
-  return transactions.map(({ time, transactionInfo, error }) => {
+const mapTransactionsToGridData = (transactions) => (
+  transactions.map(({ time, transactionInfo, error }, index) => {
     const { currency, amount, price, isBuying } = transactionInfo;
+
     const getAction = () => {
       const action = isBuying ? 'Buy' : 'Sell';
       return error ? `${action} (Failed)` : action;
     };
+
     return {
-      id: id++,
+      id: index + 1,
       currency,
       amount,
       price: price.toFixed(4),
       action: getAction(),
       time: DateTime.fromISO(time).toHTTP()
     };
-  });
-};
+  })
+);
 
 const TransactionHistoryModal = () => {
   const history = useHistory();
+  const { pathname } = useLocation();
   const [transactions, setTransactions] = useState([]);
-  const { params: { currency } } = useRouteMatch();
   const [userId] = useUserId();
 
   useEffect(() => {
@@ -74,7 +75,7 @@ const TransactionHistoryModal = () => {
   }, []);
 
   const onClose = () => {
-    history.push(currency ? `${exchangeRoute}/${currency}` : exchangeRoute);
+    history.push(pathname.replace(transactionHistoryRoute, ''));
   };
 
   return (

@@ -181,7 +181,7 @@ const Transaction = ({ stockExchangeData }) => {
           )}
         />
       </div>
-      <div className={styles.funds}>
+      <div className={styles.row}>
         <Controller
           name={fields.crypto}
           control={control}
@@ -210,7 +210,7 @@ const Transaction = ({ stockExchangeData }) => {
           )}
         />
       </div>
-      <div className={styles.funds}>
+      <div className={styles.row}>
         <Component.FormControl variant="outlined" error={!!errors.currency}>
           <Component.InputLabel id={fields.currency}>Currency</Component.InputLabel>
           <Controller
@@ -261,7 +261,7 @@ const Transaction = ({ stockExchangeData }) => {
           )}
         />
       </div>
-      <div className={styles.funds}>
+      <div className={styles.row}>
         <Controller
           name={fields.price}
           control={control}
