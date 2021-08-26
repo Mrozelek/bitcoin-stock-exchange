@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { getScrollbarWidth } from '../../utils/utils';
 
 const useStyles = makeStyles((theme) => ({
   modalBackground: {
@@ -29,12 +28,13 @@ const Modal = ({ children, show, onClose }) => {
   const classes = useStyles();
 
   useEffect(() => {
+    const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+    document.body.style.marginRight = `${scrollbarWidth}px`;
     document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight = `${getScrollbarWidth()}px`;
 
     return (() => {
-      document.body.style.overflow = 'visible';
-      document.body.style.paddingRight = 0;
+      document.body.style.marginRight = '';
+      document.body.style.overflow = '';
     });
   }, []);
 
