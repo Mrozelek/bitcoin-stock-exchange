@@ -1,8 +1,8 @@
 .wrapper {
   height: 100%;
-  display: grid;
-  grid-template-rows: min-content 1fr;
-  gap: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .heading {
@@ -11,15 +11,19 @@
   align-items: center;
 }
 
-.form {
+.funds {
   display: grid;
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr;
+
+  > div + div {
+    margin-left: 1em;
+  }
 }
 
 .buttonContainer {
   margin-left: auto;
 
-  button + button {
+  > button + button {
     margin-left: 1em;
   }
 }

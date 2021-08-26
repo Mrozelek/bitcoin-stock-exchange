@@ -7,6 +7,8 @@ import capitalize from 'capitalize';
 import configureStore from '../../redux/configureStore';
 import { StockBuilder } from '../../utils/stockBuilder';
 import Transaction, { fields, errorMessages } from './Transaction';
+import databaseService from '../../services/databaseService';
+import { USERS_PROFILES_KEY } from '../../utils/constants';
 
 const sampleData = [
   {
@@ -85,6 +87,17 @@ const LocationDisplay = () => {
 };
 
 describe('Transaction', () => {
+  beforeAll(async () => {
+    await databaseService.setItem(USERS_PROFILES_KEY, [{
+      userId: 1,
+      funds: {
+        ETH: 5,
+        USD: 10
+      },
+      transactions: []
+    }]);
+  });
+
   beforeEach(async () => {
     await act(async () => {
       render(
@@ -98,13 +111,14 @@ describe('Transaction', () => {
     });
   });
 
-  it('should display required error when values are empty', async () => {
+  it('should display required and type error when values are empty', async () => {
     await act(async () => {
       fireEvent.input(screen.getByLabelText(amountFieldLabelName), { target: { value: '' } });
       fireEvent.submit(screen.getByRole('button', { name: 'Confirm' }));
     });
 
-    expect(screen.getAllByText(errorMessages.required)).toHaveLength(2);
+    expect(screen.getByText(errorMessages.required)).toBeInTheDocument();
+    expect(screen.getByText(errorMessages.typeError)).toBeInTheDocument();
   });
 
   it('should display positive number error when amount field is negative or neutral', async () => {

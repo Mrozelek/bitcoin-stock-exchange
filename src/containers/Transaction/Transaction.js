@@ -10,9 +10,13 @@ import { useParams, useHistory, useLocation } from 'react-router-dom';
 import styles from './transaction.module.scss';
 import Text from '../../components/Text';
 import { makeExchange } from '../../redux/reducers/exchange/actions';
+import { BASE_CURRENCY } from '../../utils/constants';
+import { getUserById } from '../../services/databaseService';
 
 export const fields = {
   isBuying: 'isBuying',
+  base: 'base',
+  crypto: 'crypto',
   currency: 'currency',
   price: 'price',
   amount: 'amount',
@@ -21,6 +25,8 @@ export const fields = {
 
 const defaultValues = {
   [fields.isBuying]: true,
+  [fields.base]: '0.0000',
+  [fields.crypto]: '0.0000',
   [fields.currency]: '',
   [fields.price]: '0.0000',
   [fields.amount]: 0,
@@ -30,7 +36,7 @@ const defaultValues = {
 export const errorMessages = {
   required: 'The field is required',
   typeError: 'Value must be a number',
-  min: 'Amount must be a positive number'
+  min: 'Amount must be greater than 0.0001'
 };
 
 const schema = yup.object().shape({
@@ -38,10 +44,9 @@ const schema = yup.object().shape({
     .string()
     .required(errorMessages.required),
   [fields.amount]: yup
-    .number(errorMessages.typeError)
-    .positive(errorMessages.min)
-    .transform((val) => (Number.isNaN(val) ? undefined : val))
-    .required(errorMessages.required)
+    .number()
+    .typeError(errorMessages.typeError)
+    .min(0.0001, errorMessages.min)
 });
 
 const getCurrencyPrice = (
@@ -72,6 +77,8 @@ const Transaction = ({ stockExchangeData }) => {
   const dispatch = useDispatch();
   const { currency: currencyUrlParam } = useParams();
 
+  const userId = 1;
+
   const isBuying = watch(fields.isBuying);
 
   const isCurrencyAvailable = (name) => stockExchangeData.some((currency) => currency.name === name);
@@ -80,12 +87,39 @@ const Transaction = ({ stockExchangeData }) => {
     currencyUrlParam ? location.pathname.slice(0, -currencyUrlParam.length) : location.pathname
   );
 
-  useEffect(() => {
-    if (isCurrencyAvailable(currencyUrlParam?.toUpperCase())) {
+  const checkIfUrlParamIsValid = () => isCurrencyAvailable(currencyUrlParam?.toUpperCase());
+
+  const updateRoute = () => {
+    history.push(`${getLocationWithoutCurrency()}${getValues(fields.currency)}`);
+  };
+
+  const validateRoute = () => {
+    if (checkIfUrlParamIsValid()) {
       setValue(fields.currency, currencyUrlParam.toUpperCase());
     } else if (currencyUrlParam) {
-      history.push(`${getLocationWithoutCurrency()}${getValues(fields.currency)}`);
+      updateRoute();
     }
+  };
+
+  const updateUserBase = async () => {
+    const userFunds = (await getUserById(userId)).funds;
+    const baseFunds = userFunds[BASE_CURRENCY].toFixed(4);
+    defaultValues.base = baseFunds;
+    setValue(fields.base, baseFunds);
+  };
+
+  const updateUserCrypto = async () => {
+    if (getValues(fields.currency)) {
+      const allFunds = (await getUserById(userId)).funds;
+      const cryptoFunds = allFunds[getValues(fields.currency)]?.toFixed(4) || '0.0000';
+      setValue(fields.crypto, cryptoFunds);
+    }
+  };
+
+  useEffect(() => {
+    validateRoute();
+    updateUserBase();
+    updateUserCrypto();
   }, []);
 
   const updatePrice = () => {
@@ -106,33 +140,31 @@ const Transaction = ({ stockExchangeData }) => {
     }
   };
 
-  const updateFields = () => {
+  useEffect(() => {
     updatePrice();
     updateTotal();
-  };
-
-  useEffect(() => {
-    updateFields();
   }, [stockExchangeData]);
 
   const onReset = () => {
     reset(defaultValues);
 
     const locationWithoutCurrency = getLocationWithoutCurrency();
-    if (location !== locationWithoutCurrency) {
+    if (location.pathname !== locationWithoutCurrency) {
       history.push(`${locationWithoutCurrency}`);
     }
   };
 
-  const onSubmit = ({ amount, currency, isBuying, price }) => {
-    dispatch(makeExchange({ userId: 1, amount, currency, isBuying, price: parseFloat(price) }));
+  const onSubmit = async ({ amount, currency, isBuying, price }) => {
+    await dispatch(makeExchange({ userId, amount, currency, isBuying, price: parseFloat(price) }));
+    updateUserBase();
+    updateUserCrypto();
   };
 
-  const onCurrencyChange = (evt) => {
-    updateFields();
-
-    const currency = evt.target.value;
-    history.push(`${getLocationWithoutCurrency()}${currency}`);
+  const onCurrencyChange = () => {
+    updateRoute();
+    updatePrice();
+    updateTotal();
+    updateUserCrypto();
   };
 
   return (
@@ -153,7 +185,36 @@ const Transaction = ({ stockExchangeData }) => {
           )}
         />
       </div>
-      <div className={styles.form}>
+      <div className={styles.funds}>
+        <Controller
+          name={fields.crypto}
+          control={control}
+          render={({ field }) => (
+            <Component.TextField
+              id={fields.crypto}
+              label="Available Crypto"
+              variant="outlined"
+              disabled
+              {...field}
+            />
+          )}
+        />
+        <Controller
+          name={fields.base}
+          control={control}
+          render={({ field }) => (
+            <Component.TextField
+              id={fields.base}
+              label={`Available ${BASE_CURRENCY}`}
+              variant="outlined"
+              InputProps={{ startAdornment: <Component.InputAdornment position="start">$</Component.InputAdornment> }}
+              disabled
+              {...field}
+            />
+          )}
+        />
+      </div>
+      <div className={styles.funds}>
         <Component.FormControl variant="outlined" error={!!errors.currency}>
           <Component.InputLabel id={fields.currency}>Currency</Component.InputLabel>
           <Controller
@@ -184,20 +245,6 @@ const Transaction = ({ stockExchangeData }) => {
           </Component.FormHelperText>
         </Component.FormControl>
         <Controller
-          name={fields.price}
-          control={control}
-          render={({ field }) => (
-            <Component.TextField
-              id={fields.price}
-              label={capitalize(fields.price)}
-              variant="outlined"
-              InputProps={{ startAdornment: <Component.InputAdornment position="start">$</Component.InputAdornment> }}
-              disabled
-              {...field}
-            />
-          )}
-        />
-        <Controller
           name={fields.amount}
           control={control}
           render={({ field }) => (
@@ -211,8 +258,25 @@ const Transaction = ({ stockExchangeData }) => {
               {...field}
               onChange={(evt) => {
                 field.onChange(evt);
-                updateFields();
+                updatePrice();
+                updateTotal();
               }}
+            />
+          )}
+        />
+      </div>
+      <div className={styles.funds}>
+        <Controller
+          name={fields.price}
+          control={control}
+          render={({ field }) => (
+            <Component.TextField
+              id={fields.price}
+              label={capitalize(fields.price)}
+              variant="outlined"
+              InputProps={{ startAdornment: <Component.InputAdornment position="start">$</Component.InputAdornment> }}
+              disabled
+              {...field}
             />
           )}
         />
