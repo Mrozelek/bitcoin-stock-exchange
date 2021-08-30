@@ -4,6 +4,7 @@ import {
   Redirect,
   Switch
 } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import databaseService from './services/databaseService';
 import { USERS_PROFILES_KEY, DEFAULT_CRYPTO } from './utils/constants';
 import SiteHeading from './containers/SiteHeading';
@@ -12,9 +13,11 @@ import TransactionHistoryModal from './containers/TransactionHistoryModal';
 import { wrapper } from './App.module.scss';
 import { exchangeRoute, transactionHistoryRoute } from './utils/routes';
 import useUserId from './hooks/useUserId';
+import { fetchTransactions } from './redux/reducers/exchange/actions';
 
 const App = () => {
   const [userId] = useUserId();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     databaseService.setItem(USERS_PROFILES_KEY, [{
@@ -25,6 +28,8 @@ const App = () => {
       },
       transactions: []
     }]);
+
+    dispatch(fetchTransactions(userId));
   }, []);
 
   return (

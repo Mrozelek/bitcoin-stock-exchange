@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { DataGrid } from '@material-ui/data-grid';
 import { useHistory, useLocation } from 'react-router-dom';
 import { DateTime } from 'luxon';
-import { getUserById } from '../../services/databaseService';
 import Modal from '../../components/Modal/Modal';
 import { transactionHistoryRoute } from '../../utils/routes';
-import useUserId from '../../hooks/useUserId';
 
 const columns = [
   {
@@ -61,18 +60,9 @@ const mapTransactionsToGridData = (transactions) => (
   })
 );
 
-const TransactionHistoryModal = () => {
+const TransactionHistoryModal = ({ transactions }) => {
   const history = useHistory();
   const { pathname } = useLocation();
-  const [transactions, setTransactions] = useState([]);
-  const [userId] = useUserId();
-
-  useEffect(() => {
-    const setUserTransactions = async (userId) => {
-      setTransactions((await getUserById(userId)).transactions);
-    };
-    setUserTransactions(userId);
-  }, []);
 
   const onClose = () => {
     history.push(pathname.replace(transactionHistoryRoute, ''));
@@ -92,3 +82,5 @@ const TransactionHistoryModal = () => {
 };
 
 export default TransactionHistoryModal;
+
+TransactionHistoryModal.propTypes = { transactions: PropTypes.array.isRequired };

@@ -1,4 +1,5 @@
-import { EXCHANGE_MAKE_INIT, EXCHANGE_MAKE_SUCCESS, EXCHANGE_MAKE_FAILURE } from './actions';
+import { DateTime } from 'luxon';
+import { EXCHANGE_MAKE_INIT, EXCHANGE_MAKE_SUCCESS, EXCHANGE_MAKE_FAILURE, FETCH_TRANSACTIONS } from './actions';
 
 export const initialState = {
   isLoading: true,
@@ -10,16 +11,21 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case EXCHANGE_MAKE_INIT: {
       return {
-        ...state,
-        isLoading: true,
-        isError: false,
-        error: initialState.error
+        transactionRecords: [],
+        ...state
       };
     }
     case EXCHANGE_MAKE_SUCCESS: {
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        transactionRecords: [
+          ...state.transactionRecords,
+          {
+            time: DateTime.now().toISO(),
+            transactionInfo: action.payload.transactionInfo
+          }
+        ]
       };
     }
     case EXCHANGE_MAKE_FAILURE: {
@@ -27,7 +33,21 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: false,
         isError: true,
-        error: action.payload.error
+        error: action.payload.error,
+        transactionRecords: [
+          ...state.transactionRecords,
+          {
+            time: DateTime.now().toISO(),
+            transactionInfo: action.payload.transactionInfo,
+            error: action.payload.error
+          }
+        ]
+      };
+    }
+    case FETCH_TRANSACTIONS: {
+      return {
+        ...state,
+        transactionRecords: action.payload.transactionRecords
       };
     }
     default:
