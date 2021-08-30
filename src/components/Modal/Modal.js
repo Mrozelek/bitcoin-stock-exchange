@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -26,17 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Modal = ({ children, show, onClose }) => {
   const classes = useStyles();
-
-  useEffect(() => {
-    const scrollbarWidth = window.innerWidth - document.body.clientWidth;
-    document.body.style.marginRight = `${scrollbarWidth}px`;
-    document.body.style.overflow = 'hidden';
-
-    return (() => {
-      document.body.style.marginRight = '';
-      document.body.style.overflow = '';
-    });
-  }, []);
 
   const handleCloseByEscape = (evt) => {
     if ((evt.charCode || evt.keyCode) === 27) {
