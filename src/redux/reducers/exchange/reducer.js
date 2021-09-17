@@ -4,15 +4,16 @@ import { EXCHANGE_MAKE_INIT, EXCHANGE_MAKE_SUCCESS, EXCHANGE_MAKE_FAILURE, FETCH
 export const initialState = {
   isLoading: true,
   isError: false,
-  error: null
+  error: null,
+  transactionRecords: []
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case EXCHANGE_MAKE_INIT: {
       return {
-        transactionRecords: [],
-        ...state
+        ...initialState,
+        transactionRecords: state.transactionRecords
       };
     }
     case EXCHANGE_MAKE_SUCCESS: {
