@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Github deploy script [@nilphym](https://github.com/nilphym).
 - Github deploy action [@nilphym](https://github.com/nilphym).
 - Currency preview at Market Page [@nilphym](https://github.com/nilphym).
+- Material UI DataGrid component [@nilphym](https://github.com/nilphym).
+- Custom hook to fetch current user id [@nilphym](https://github.com/nilphym).
+- Fetching data from redux about user transactions on initial app mount [@nilphym](https://github.com/nilphym).
+- Transaction history modal with proper routing [@nilphym](https://github.com/nilphym).
+- Modal component [@nilphym](https://github.com/nilphym).
 
 ### Changed
 
@@ -33,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CurrencyTable no longer hides table on error, instead shows last fetched data in table [@nilphym](https://github.com/nilphym).
 - Spinner has been moved to MarketPage [@nilphym](https://github.com/nilphym).
 - Market Page now has two text fields per row [@nilphym](https://github.com/nilphym).
+- 
 
 ## [1.1.0] - 2021-07-10
 
