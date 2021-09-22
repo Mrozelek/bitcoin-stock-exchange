@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [1.2.0] - 2021-09-22
+
+### Added
+
+- Transaction and wallet services [@nilphym](https://github.com/nilphym).
+- Localforage library [@nilphym](https://github.com/nilphym).
+- Luxon library [@nilphym](https://github.com/nilphym).
+- File with error messages [@nilphym](https://github.com/nilphym).
+- Exchange reducer [@nilphym](https://github.com/nilphym).
+- Custom middlewares folder with transactionRegister middleware [@nilphym](https://github.com/nilphym).
+- Cache busting for stock data fetching [@nilphym](https://github.com/nilphym).
+- Notification API with notistack [@nilphym](https://github.com/nilphym).
+- Notifications that inform user about various events [@nilphym](https://github.com/nilphym).
+- Routing integration with transactions [@nilphym](https://github.com/nilphym).
+- Github deploy script [@nilphym](https://github.com/nilphym).
+- Github deploy action [@nilphym](https://github.com/nilphym).
+- Currency preview at Market Page [@nilphym](https://github.com/nilphym).
+
+### Changed
+
+- Moved constants to separate file [@nilphym](https://github.com/nilphym).
+- Moved colors to utils directory [@nilphym](https://github.com/nilphym).
+- Moved CurrencyTable to containers directory [@nilphym](https://github.com/nilphym).
+- Stock builder uses cryptocurrency name as uuid [@nilphym](https://github.com/nilphym).
+- Updated react-scripts from 4.0.1 to 4.0.3 [@nilphym](https://github.com/nilphym).
+- CurrencyTable no longer hides table on error, instead shows last fetched data in table [@nilphym](https://github.com/nilphym).
+- Spinner has been moved to MarketPage [@nilphym](https://github.com/nilphym).
+- Market Page now has two text fields per row [@nilphym](https://github.com/nilphym).
+
 ## [1.1.0] - 2021-07-10
 
 ### Added
@@ -53,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Yarn 2 [@nilphym](https://github.com/nilphym).
 - CHANGELOG file [@rezik007](https://github.com/rezik007).
 
-[unreleased]: https://github.com/Mrozelek/bitcoin-stock-exchange/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/Mrozelek/bitcoin-stock-exchange/releases/tag/v1.0.0...v1.1.0
+[unreleased]: https://github.com/Mrozelek/bitcoin-stock-exchange/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/Mrozelek/bitcoin-stock-exchange/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/Mrozelek/bitcoin-stock-exchange/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Mrozelek/bitcoin-stock-exchange/releases/tag/v1.0.0

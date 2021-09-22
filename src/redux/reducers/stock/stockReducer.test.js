@@ -1,11 +1,13 @@
-/* eslint-disable prefer-promise-reject-errors */
 import axios from 'axios';
 import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
+import { snackActions } from '../../../utils/SnackbarUtils';
 import * as actions from './actions';
 import reducer, { initialState } from './reducer';
 
 jest.mock('axios');
+const toastSpy = jest.spyOn(snackActions, 'toast');
+const dismissSpy = jest.spyOn(snackActions, 'dismiss');
 
 describe('Action creators', () => {
   it('should create an action to initialize a get stock data request', () => {
@@ -64,13 +66,15 @@ describe('Async action creator', () => {
     axios.get.mockImplementationOnce(() => Promise.resolve({ data: sampleResponse }));
 
     await store.dispatch(actions.getTickers());
+    expect(dismissSpy).toHaveBeenCalled();
     expect(store.getActions()).toEqual(expectedSuccessActions);
   });
 
   it('creates STOCK_GET_FAILURE when fetching stock data failed', async () => {
-    axios.get.mockImplementationOnce(() => Promise.reject('Failed to fetch data'));
+    axios.get.mockImplementationOnce(() => Promise.reject(new Error('Failed to fetch data')));
 
     await store.dispatch(actions.getTickers());
+    expect(toastSpy).toHaveBeenCalled();
     expect(store.getActions()).toEqual(expectedFailureActions);
   });
 });

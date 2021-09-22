@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
-
 export class StockBuilder {
   setName(name) {
     this.name = name.toUpperCase();
@@ -28,7 +26,7 @@ export class StockBuilder {
 
   build() {
     return ({
-      uuid: uuidv4(),
+      uuid: this.name,
       name: this.name,
       change: this.change,
       price: this.price,

@@ -1,9 +1,8 @@
 import React from 'react';
 import * as Component from '@material-ui/core';
 import PropTypes from 'prop-types';
-import colors from '../../colors';
-
-const currencyName = 'USD';
+import colors from '../../utils/colors';
+import { BASE_CURRENCY } from '../../utils/constants';
 
 const roundNumber = (number) => (Math.round(number * 100) / 100).toFixed(2);
 
@@ -22,7 +21,7 @@ const formatPrice = (price) => {
   const priceRounded = roundNumber(price);
   const priceFormatted = formatIntegerPart(priceRounded);
 
-  return `${priceFormatted} ${currencyName}`;
+  return `${priceFormatted} ${BASE_CURRENCY}`;
 };
 
 const formatChange = (change) => {
@@ -34,7 +33,7 @@ const formatCap = (cap) => {
   const capRounded = roundNumber(cap);
   const capFormatted = formatIntegerPart(capRounded);
 
-  return !cap ? 'Unknown' : `${capFormatted}M ${currencyName}`;
+  return !cap ? 'Unknown' : `${capFormatted}M ${BASE_CURRENCY}`;
 };
 
 const formatStockExchangeData = (stockExchangeData) => (
