@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [1.2.0] - 2021-09-22
+
 ### Added
 
 - Transaction and wallet services [@nilphym](https://github.com/nilphym).
@@ -80,6 +83,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Yarn 2 [@nilphym](https://github.com/nilphym).
 - CHANGELOG file [@rezik007](https://github.com/rezik007).
 
-[unreleased]: https://github.com/Mrozelek/bitcoin-stock-exchange/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/Mrozelek/bitcoin-stock-exchange/releases/tag/v1.0.0...v1.1.0
+[unreleased]: https://github.com/Mrozelek/bitcoin-stock-exchange/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/Mrozelek/bitcoin-stock-exchange/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/Mrozelek/bitcoin-stock-exchange/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Mrozelek/bitcoin-stock-exchange/releases/tag/v1.0.0
