@@ -12,6 +12,8 @@ import Text from '../../components/Text';
 import { makeExchange } from '../../redux/reducers/exchange/actions';
 import { BASE_CURRENCY } from '../../utils/constants';
 import { getUserById } from '../../services/databaseService';
+import { exchangeRoute } from '../../utils/routes';
+import useUserId from '../../hooks/useUserId';
 
 export const fields = {
   isBuying: 'isBuying',
@@ -73,30 +75,25 @@ const Transaction = ({ stockExchangeData }) => {
   });
 
   const history = useHistory();
-  const location = useLocation();
+  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const { currency: currencyUrlParam } = useParams();
-
-  const userId = 1;
+  const [userId] = useUserId();
 
   const isBuying = watch(fields.isBuying);
 
   const isCurrencyAvailable = (name) => stockExchangeData.some((currency) => currency.name === name);
 
-  const getLocationWithoutCurrency = () => (
-    currencyUrlParam ? location.pathname.slice(0, -currencyUrlParam.length) : location.pathname
-  );
-
   const checkIfUrlParamIsValid = () => isCurrencyAvailable(currencyUrlParam?.toUpperCase());
 
   const updateRoute = () => {
-    history.push(`${getLocationWithoutCurrency()}${getValues(fields.currency)}`);
+    history.push(`${exchangeRoute}/${getValues(fields.currency)}`);
   };
 
   const validateRoute = () => {
     if (checkIfUrlParamIsValid()) {
       setValue(fields.currency, currencyUrlParam.toUpperCase());
-    } else if (currencyUrlParam) {
+    } else if (currencyUrlParam !== 'transactionHistory') {
       updateRoute();
     }
   };
@@ -148,9 +145,8 @@ const Transaction = ({ stockExchangeData }) => {
   const onReset = () => {
     reset(defaultValues);
 
-    const locationWithoutCurrency = getLocationWithoutCurrency();
-    if (location.pathname !== locationWithoutCurrency) {
-      history.push(`${locationWithoutCurrency}`);
+    if (pathname !== exchangeRoute) {
+      history.push(exchangeRoute);
     }
   };
 
@@ -185,7 +181,7 @@ const Transaction = ({ stockExchangeData }) => {
           )}
         />
       </div>
-      <div className={styles.funds}>
+      <div className={styles.row}>
         <Controller
           name={fields.crypto}
           control={control}
@@ -214,7 +210,7 @@ const Transaction = ({ stockExchangeData }) => {
           )}
         />
       </div>
-      <div className={styles.funds}>
+      <div className={styles.row}>
         <Component.FormControl variant="outlined" error={!!errors.currency}>
           <Component.InputLabel id={fields.currency}>Currency</Component.InputLabel>
           <Controller
@@ -265,7 +261,7 @@ const Transaction = ({ stockExchangeData }) => {
           )}
         />
       </div>
-      <div className={styles.funds}>
+      <div className={styles.row}>
         <Controller
           name={fields.price}
           control={control}

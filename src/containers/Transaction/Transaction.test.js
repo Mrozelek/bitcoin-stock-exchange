@@ -9,6 +9,7 @@ import { StockBuilder } from '../../utils/stockBuilder';
 import Transaction, { fields, errorMessages } from './Transaction';
 import databaseService from '../../services/databaseService';
 import { USERS_PROFILES_KEY } from '../../utils/constants';
+import { exchangeRoute } from '../../utils/routes';
 
 const sampleData = [
   {
@@ -194,35 +195,35 @@ describe('Transaction', () => {
   });
 
   it('should not change correct route', () => {
-    history.push('/exchange/');
-    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/');
+    history.push(exchangeRoute);
+    expect(screen.getByTestId('location-display')).toHaveTextContent(exchangeRoute);
 
-    history.push('/exchange/ETH');
-    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/ETH');
+    history.push(`${exchangeRoute}/ETH`);
+    expect(screen.getByTestId('location-display')).toHaveTextContent(`${exchangeRoute}/ETH`);
   });
 
   it('should change incorrect route', () => {
-    history.push('/exchange/GRGRS');
-    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/');
+    history.push(`${exchangeRoute}/GRGRS`);
+    expect(screen.getByTestId('location-display')).toHaveTextContent(`${exchangeRoute}/`);
   });
 
   it('should change route when currency changes', () => {
-    history.push('/exchange/');
+    history.push(exchangeRoute);
 
     act(() => {
       fireEvent.input(screen.getByTestId(fields.currency), { target: { value: 'BTC' } });
     });
 
-    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/BTC');
+    expect(screen.getByTestId('location-display')).toHaveTextContent(`${exchangeRoute}/BTC`);
   });
 
   it('should change route when reset button is clicked', () => {
-    history.push('/exchange/BTC');
+    history.push(`${exchangeRoute}/BTC`);
 
     act(() => {
       fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
     });
 
-    expect(screen.getByTestId('location-display')).toHaveTextContent('/exchange/');
+    expect(screen.getByTestId('location-display')).toHaveTextContent(exchangeRoute);
   });
 });

@@ -1,11 +1,12 @@
 {
-  "homepage": "https://bitcoinstockexchangeteam.github.io/bitcoin-stock-exchange",
-  "name": "bitcoin-stock-exchange",
+  "homepage": "https://nilphym.github.io/cryptocurrency-exchange",
+  "name": "cryptocurrency-exchange",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^2.4.0",
     "@material-ui/core": "^4.11.3",
+    "@material-ui/data-grid": "^4.0.0-alpha.37",
     "@material-ui/icons": "^4.11.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
