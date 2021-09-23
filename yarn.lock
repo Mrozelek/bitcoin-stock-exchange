@@ -6155,66 +6155,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bitcoin-stock-exchange@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "bitcoin-stock-exchange@workspace:."
-  dependencies:
-    "@hookform/resolvers": ^2.4.0
-    "@material-ui/core": ^4.11.3
-    "@material-ui/data-grid": ^4.0.0-alpha.37
-    "@material-ui/icons": ^4.11.2
-    "@mdx-js/react": ^1.6.22
-    "@storybook/addon-actions": ^6.1.14
-    "@storybook/addon-docs": ^6.1.14
-    "@storybook/addon-essentials": ^6.1.14
-    "@storybook/addon-links": ^6.1.14
-    "@storybook/node-logger": ^6.1.14
-    "@storybook/preset-create-react-app": ^3.1.5
-    "@storybook/react": ^6.1.14
-    "@testing-library/jest-dom": ^5.11.4
-    "@testing-library/react": ^11.1.0
-    "@testing-library/user-event": ^12.1.10
-    "@wojtekmaj/enzyme-adapter-react-17": ^0.4.1
-    axios: ^0.21.1
-    babel-eslint: ^10.1.0
-    capitalize: ^2.0.3
-    connected-react-router: ^6.8.0
-    enzyme: ^3.11.0
-    eslint: ^7.17.0
-    eslint-config-airbnb: ^18.2.1
-    eslint-config-react-app: ^6.0.0
-    eslint-plugin-flowtype: ^5.2.0
-    eslint-plugin-import: ^2.22.1
-    eslint-plugin-jest: ^24.0.0
-    eslint-plugin-jsx-a11y: ^6.4.1
-    eslint-plugin-react: ^7.22.0
-    eslint-plugin-react-hooks: ^4.2.0
-    eslint-plugin-testing-library: ^3.10.1
-    gh-pages: ^3.1.0
-    history: 4.10.1
-    husky: ^4.3.7
-    lint-staged: ^10.5.3
-    localforage: ^1.9.0
-    luxon: ^2.0.1
-    node-sass: 4.14.1
-    notistack: ^1.0.9
-    prop-types: ^15.7.2
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    react-hook-form: ^7.3.5
-    react-redux: ^7.2.2
-    react-router-dom: ^5.2.0
-    react-scripts: 4.0.3
-    redux: ^4.0.5
-    redux-mock-store: ^1.5.4
-    redux-thunk: ^2.3.0
-    stylelint: ^13.7.2
-    stylelint-scss: ^3.18.0
-    uuid: ^8.3.2
-    yup: ^0.32.9
-  languageName: unknown
-  linkType: soft
-
 "block-stream@npm:*":
   version: 0.0.9
   resolution: "block-stream@npm:0.0.9"
@@ -7787,6 +7727,66 @@ __metadata:
   checksum: 0876b316ccf6f501d0deda42507adcfff276790eba38ab87ba4a7f77e1f11404f406fa36a8c273e781c9eabbbe5da4eab4d7577ca1e84dcac556743ffc816af5
   languageName: node
   linkType: hard
+
+"cryptocurrency-exchange@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "cryptocurrency-exchange@workspace:."
+  dependencies:
+    "@hookform/resolvers": ^2.4.0
+    "@material-ui/core": ^4.11.3
+    "@material-ui/data-grid": ^4.0.0-alpha.37
+    "@material-ui/icons": ^4.11.2
+    "@mdx-js/react": ^1.6.22
+    "@storybook/addon-actions": ^6.1.14
+    "@storybook/addon-docs": ^6.1.14
+    "@storybook/addon-essentials": ^6.1.14
+    "@storybook/addon-links": ^6.1.14
+    "@storybook/node-logger": ^6.1.14
+    "@storybook/preset-create-react-app": ^3.1.5
+    "@storybook/react": ^6.1.14
+    "@testing-library/jest-dom": ^5.11.4
+    "@testing-library/react": ^11.1.0
+    "@testing-library/user-event": ^12.1.10
+    "@wojtekmaj/enzyme-adapter-react-17": ^0.4.1
+    axios: ^0.21.1
+    babel-eslint: ^10.1.0
+    capitalize: ^2.0.3
+    connected-react-router: ^6.8.0
+    enzyme: ^3.11.0
+    eslint: ^7.17.0
+    eslint-config-airbnb: ^18.2.1
+    eslint-config-react-app: ^6.0.0
+    eslint-plugin-flowtype: ^5.2.0
+    eslint-plugin-import: ^2.22.1
+    eslint-plugin-jest: ^24.0.0
+    eslint-plugin-jsx-a11y: ^6.4.1
+    eslint-plugin-react: ^7.22.0
+    eslint-plugin-react-hooks: ^4.2.0
+    eslint-plugin-testing-library: ^3.10.1
+    gh-pages: ^3.1.0
+    history: 4.10.1
+    husky: ^4.3.7
+    lint-staged: ^10.5.3
+    localforage: ^1.9.0
+    luxon: ^2.0.1
+    node-sass: 4.14.1
+    notistack: ^1.0.9
+    prop-types: ^15.7.2
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    react-hook-form: ^7.3.5
+    react-redux: ^7.2.2
+    react-router-dom: ^5.2.0
+    react-scripts: 4.0.3
+    redux: ^4.0.5
+    redux-mock-store: ^1.5.4
+    redux-thunk: ^2.3.0
+    stylelint: ^13.7.2
+    stylelint-scss: ^3.18.0
+    uuid: ^8.3.2
+    yup: ^0.32.9
+  languageName: unknown
+  linkType: soft
 
 "css-blank-pseudo@npm:^0.1.4":
   version: 0.1.4

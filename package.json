@@ -1,6 +1,6 @@
 {
-  "homepage": "https://bitcoinstockexchangeteam.github.io/bitcoin-stock-exchange",
-  "name": "bitcoin-stock-exchange",
+  "homepage": "https://nilphym.github.io/cryptocurrency-exchange",
+  "name": "cryptocurrency-exchange",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
