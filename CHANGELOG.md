@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Proper readme [@nilphym](https://github.com/nilphym).
+
 ## [1.2.1] - 2021-09-23
 
 ### Changed
@@ -46,7 +50,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CurrencyTable no longer hides table on error, instead shows last fetched data in table [@nilphym](https://github.com/nilphym).
 - Spinner has been moved to MarketPage [@nilphym](https://github.com/nilphym).
 - Market Page now has two text fields per row [@nilphym](https://github.com/nilphym).
-- 
 
 ## [1.1.0] - 2021-07-10
 
