@@ -1,70 +1,40 @@
-# Getting Started with Create React App
+# Cryptocurrency exchange
+Cryptocurrency exchange app which lets you simulate playing on the real market by fetching real world data. Created with React.  
+[View Demo](https://nilphym.github.io/cryptocurrency-exchange)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Table of content
+* [General info](#general-info)
+* [Technologies and methodologies](#technologies-and-methodologies)
+* [Setup](#setup)
+* [Contact](#contact)
 
-In the project directory, you can run:
 
-### `yarn start`
+## General info
+Web app developed with React which lets you play on crypto stock market without need for spending real money. You will be given some amount of money which you can spend on playing. All progress will be saved locally in your browser.  
+Project has strict github workflow which is described [here](CONTRIBUTION.md) which is assisted by github actions. Current cryptocurrency exchange rates data is fetched from [Coingecko API](https://www.coingecko.com/en/api).  
+App created by cooperation with [Patryk Rezler](https://github.com/rezik007) who was delivering code reviews and valuable coding tips.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Technologies and methodologies
+* [React](https://reactjs.org)
+* [React Router](https://reactrouter.com)
+* [Redux](https://redux.js.org)
+* [Storybook](https://storybook.js.org)
+* [Material UI](https://mui.com)
+* [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+* [SASS](https://sass-lang.com)
+* [Yup](https://github.com/jquense/yup)
+* [Github Actions](https://github.com/features/actions)
+* [Keep a Changelog](https://keepachangelog.com/en/1.0.0)
+* [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
+* [and more...](package.json)
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Setup
+To view the website simply [click here](https://nilphym.github.io/cryptocurrency-exchange).  
+If you want to build the website on your own, clone the repo, use `npm i` or `yarn` and `npm start` or `yarn start`.
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Contact
+Created by **Jędrzej Ratajczak** ([@nilphym](https://github.com/nilphym)) - feel free to contact me!
