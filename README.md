@@ -1,6 +1,5 @@
 # Cryptocurrency exchange
 Cryptocurrency exchange app which lets you simulate playing on the real market by fetching real world data. Created with React.  
-[View Demo](https://nilphym.github.io/cryptocurrency-exchange)
 
 
 ## Table of content
@@ -35,6 +34,3 @@ App created by cooperation with [Patryk Rezler](https://github.com/rezik007) who
 To view the website simply [click here](https://nilphym.github.io/cryptocurrency-exchange).  
 If you want to build the website on your own, clone the repo, use `npm i` or `yarn` and `npm start` or `yarn start`.
 
-
-## Contact
-Created by **Jędrzej Ratajczak** ([@nilphym](https://github.com/nilphym)) - feel free to contact me!
